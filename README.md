@@ -4,6 +4,8 @@ Gift module for Kaukauna Dog Park and the Fox Valley.
 
 Canonical public address: **https://parks.milomaps.com**
 
+Live now (same app, temporary host until the name is attached): **https://milomaps-parks.netlify.app**
+
 This does **not** replace [milomaps.com](https://milomaps.com) (Amber Trails). Civic Parks is a sibling module.
 
 ## What neighbors get
@@ -16,16 +18,20 @@ This does **not** replace [milomaps.com](https://milomaps.com) (Amber Trails). C
 
 Neighbors never pay.
 
-## Go live (parks.milomaps.com)
+## Attach parks.milomaps.com
 
-DNS for `milomaps.com` is on Cloudflare. `www` already points at Vercel. `parks` has no record yet.
+DNS for `milomaps.com` is on Cloudflare. `www` already points at Vercel (Amber Trails). `parks` has no record yet.
 
-**Do not change the apex or `www`.** Add one record:
+**Do not change the apex or `www`.** Two small steps:
 
-| Type  | Name  | Target                | Proxy        |
-| ----- | ----- | --------------------- | ------------ |
-| CNAME | parks | `cname.vercel-dns.com` | DNS only     |
+1. Cloudflare → milomaps.com → DNS → Add record:
 
-Then in the Vercel project **milomaps-parks**, add domain `parks.milomaps.com`.
+| Type  | Name  | Target                         | Proxy    |
+| ----- | ----- | ------------------------------ | -------- |
+| CNAME | parks | `milomaps-parks.netlify.app`   | DNS only |
+
+2. [Netlify → milomaps-parks → Domain management](https://app.netlify.com/projects/milomaps-parks/domain-management) → Add domain `parks.milomaps.com`.
 
 Leave Amber Trails on `milomaps.com` / `www.milomaps.com`.
+
+Do not post the Facebook gift until `https://parks.milomaps.com` loads Civic Parks.
