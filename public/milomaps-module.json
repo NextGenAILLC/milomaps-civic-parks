@@ -1,0 +1,16 @@
+{
+  "schema": "milomaps.civic.v1",
+  "brand": "Milo Maps",
+  "module": "civic-parks",
+  "canonical": "https://parks.milomaps.com",
+  "parent": "https://milomaps.com",
+  "parentProduct": "Amber Trails",
+  "token": "PawSteps",
+  "payments": "intent-only",
+  "family": {
+    "civic": "https://parks.milomaps.com",
+    "trails": "https://milomaps.com",
+    "map": "https://milomaps.com/map",
+    "story": "https://milomaps.com/story"
+  }
+}
