@@ -1,4 +1,3 @@
-import { createServerFn } from "@tanstack/react-start";
 import { timingSafeEqual } from "node:crypto";
 import {
   PROPOSALS,
@@ -351,107 +350,102 @@ function requireAdminPassword(input: AdminPasswordInput): void {
   }
 }
 
-export const getPublicSponsors = createServerFn({ method: "POST" })
-  .validator((data: { siteId?: SiteId }) => ({ siteId: data?.siteId ? normalizeSiteId(data.siteId) : undefined }))
-  .handler(async ({ data }): Promise<PublicSponsor[]> => {
-    try {
-      return await listSponsors(data.siteId);
-    } catch (err) {
-      console.error("[civic] sponsor list failed; using seed fallback", err);
-      return fallbackSponsors(data.siteId);
-    }
-  });
+export async function publicListSponsors(data: { siteId?: SiteId }): Promise<PublicSponsor[]> {
+  const siteId = data?.siteId ? normalizeSiteId(data.siteId) : undefined;
+  try {
+    return await listSponsors(siteId);
+  } catch (err) {
+    console.error("[civic] sponsor list failed; using seed fallback", err);
+    return fallbackSponsors(siteId);
+  }
+}
 
-export const recordPublicActivity = createServerFn({ method: "POST" })
-  .validator((data: PublicActivityInput) => normalizePublicActivity(data))
-  .handler(async ({ data }): Promise<{ ok: true }> => {
-    const { assertSameSiteRequest } = await import("./auth/isolation.server");
-    assertSameSiteRequest();
-    const { getSql } = await import("./db");
-    const sql = await getSql();
-    const id =
-      typeof crypto !== "undefined" && "randomUUID" in crypto
-        ? crypto.randomUUID()
-        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+export async function publicRecordActivity(input: PublicActivityInput): Promise<{ ok: true }> {
+  const data = normalizePublicActivity(input);
+  const { assertSameSiteRequest } = await import("./auth/isolation.server");
+  assertSameSiteRequest();
+  const { getSql } = await import("./db");
+  const sql = await getSql();
+  const id =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  await sql.query(
+    `INSERT INTO civic_activity (
+       id, kind, site_id, participant_handle, proposal_id, proposal_title, amount, note
+     )
+     VALUES ($1, $2, $3, NULLIF($4, ''), NULLIF($5, ''), NULLIF($6, ''), $7, $8)`,
+    [
+      id,
+      data.kind,
+      data.siteId,
+      data.participantHandle ?? "",
+      data.proposalId ?? "",
+      data.proposalTitle ?? "",
+      data.amount ?? 0,
+      data.note ?? "",
+    ],
+  );
+
+  if (data.kind === "vote" && data.proposalId && data.proposalTitle) {
     await sql.query(
-      `INSERT INTO civic_activity (
-         id, kind, site_id, participant_handle, proposal_id, proposal_title, amount, note
-       )
-       VALUES ($1, $2, $3, NULLIF($4, ''), NULLIF($5, ''), NULLIF($6, ''), $7, $8)`,
-      [
-        id,
-        data.kind,
-        data.siteId,
-        data.participantHandle ?? "",
-        data.proposalId ?? "",
-        data.proposalTitle ?? "",
-        data.amount ?? 0,
-        data.note ?? "",
-      ],
+      `INSERT INTO civic_vote_tallies (proposal_id, site_id, proposal_title, community_votes)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (proposal_id) DO UPDATE
+         SET community_votes = civic_vote_tallies.community_votes + EXCLUDED.community_votes,
+             proposal_title = EXCLUDED.proposal_title,
+             site_id = EXCLUDED.site_id,
+             updated_at = now()`,
+      [data.proposalId, data.siteId, data.proposalTitle, data.amount ?? 0],
     );
+  }
 
-    if (data.kind === "vote" && data.proposalId && data.proposalTitle) {
-      await sql.query(
-        `INSERT INTO civic_vote_tallies (proposal_id, site_id, proposal_title, community_votes)
-         VALUES ($1, $2, $3, $4)
-         ON CONFLICT (proposal_id) DO UPDATE
-           SET community_votes = civic_vote_tallies.community_votes + EXCLUDED.community_votes,
-               proposal_title = EXCLUDED.proposal_title,
-               site_id = EXCLUDED.site_id,
-               updated_at = now()`,
-        [data.proposalId, data.siteId, data.proposalTitle, data.amount ?? 0],
-      );
-    }
+  return { ok: true };
+}
 
-    return { ok: true };
-  });
+export async function adminGetDashboard(data: AdminPasswordInput): Promise<AdminDashboard> {
+  const { assertSameSiteRequest } = await import("./auth/isolation.server");
+  assertSameSiteRequest();
+  requireAdminPassword({ password: cleanText(data?.password, 500) });
+  return getDashboard();
+}
 
-export const getAdminDashboard = createServerFn({ method: "POST" })
-  .validator((data: AdminPasswordInput) => ({ password: cleanText(data?.password, 500) }))
-  .handler(async ({ data }): Promise<AdminDashboard> => {
-    const { assertSameSiteRequest } = await import("./auth/isolation.server");
-    assertSameSiteRequest();
-    requireAdminPassword(data);
-    return getDashboard();
-  });
-
-export const saveSponsor = createServerFn({ method: "POST" })
-  .validator((data: SponsorUpdateInput) => normalizeSponsorUpdate(data))
-  .handler(async ({ data }): Promise<AdminDashboard> => {
-    const { assertSameSiteRequest } = await import("./auth/isolation.server");
-    assertSameSiteRequest();
-    requireAdminPassword(data);
-    const { getSql } = await import("./db");
-    const sql = await getSql();
-    const pledgedCents = Math.round(data.pledged * 100);
-    const status = data.status === "active" && data.paid ? "active" : "prospect";
-    await sql.query(
-      `UPDATE civic_sponsors
-          SET name = $2,
-              category = $3,
-              status = $4,
-              pledged_cents = $5,
-              paid = $6,
-              is_custodian = $7,
-              note = $8,
-              website = NULLIF($9, ''),
-              showcase_title = $10,
-              showcase_body = $11,
-              updated_at = now()
-        WHERE id = $1`,
-      [
-        data.id,
-        data.name,
-        data.category,
-        status,
-        pledgedCents,
-        data.paid,
-        data.isCustodian,
-        data.note,
-        data.website ?? "",
-        data.showcaseTitle,
-        data.showcaseBody,
-      ],
-    );
-    return getDashboard();
-  });
+export async function adminSaveSponsor(input: SponsorUpdateInput): Promise<AdminDashboard> {
+  const data = normalizeSponsorUpdate(input);
+  const { assertSameSiteRequest } = await import("./auth/isolation.server");
+  assertSameSiteRequest();
+  requireAdminPassword(data);
+  const { getSql } = await import("./db");
+  const sql = await getSql();
+  const pledgedCents = Math.round(data.pledged * 100);
+  const status = data.status === "active" && data.paid ? "active" : "prospect";
+  await sql.query(
+    `UPDATE civic_sponsors
+        SET name = $2,
+            category = $3,
+            status = $4,
+            pledged_cents = $5,
+            paid = $6,
+            is_custodian = $7,
+            note = $8,
+            website = NULLIF($9, ''),
+            showcase_title = $10,
+            showcase_body = $11,
+            updated_at = now()
+      WHERE id = $1`,
+    [
+      data.id,
+      data.name,
+      data.category,
+      status,
+      pledgedCents,
+      data.paid,
+      data.isCustodian,
+      data.note,
+      data.website ?? "",
+      data.showcaseTitle,
+      data.showcaseBody,
+    ],
+  );
+  return getDashboard();
+}

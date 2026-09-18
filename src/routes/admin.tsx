@@ -10,7 +10,7 @@ import {
   type AdminDashboard,
   type PublicSponsor,
   type SponsorUpdateInput,
-} from "@/lib/civic.server";
+} from "@/lib/civic";
 import {
   SPONSOR_CATEGORY_LABELS,
   siteById,

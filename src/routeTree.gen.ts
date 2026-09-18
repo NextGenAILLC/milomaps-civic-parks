@@ -13,9 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as SponsorsSponsorIdRouteImport } from './routes/sponsors.$sponsorId'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TransparencyRouteImport } from './routes/transparency'
+import { Route as SponsorsSponsorIdRouteImport } from './routes/sponsors.$sponsorId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -37,11 +37,6 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SponsorsSponsorIdRoute = SponsorsSponsorIdRouteImport.update({
-  id: '/sponsors/$sponsorId',
-  path: '/sponsors/$sponsorId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
@@ -52,24 +47,29 @@ const TransparencyRoute = TransparencyRouteImport.update({
   path: '/transparency',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SponsorsSponsorIdRoute = SponsorsSponsorIdRouteImport.update({
+  id: '/sponsors/$sponsorId',
+  path: '/sponsors/$sponsorId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/privacy': typeof PrivacyRoute
-  '/sponsors/$sponsorId': typeof SponsorsSponsorIdRoute
   '/terms': typeof TermsRoute
   '/transparency': typeof TransparencyRoute
+  '/sponsors/$sponsorId': typeof SponsorsSponsorIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/privacy': typeof PrivacyRoute
-  '/sponsors/$sponsorId': typeof SponsorsSponsorIdRoute
   '/terms': typeof TermsRoute
   '/transparency': typeof TransparencyRoute
+  '/sponsors/$sponsorId': typeof SponsorsSponsorIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,16 +77,38 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/privacy': typeof PrivacyRoute
-  '/sponsors/$sponsorId': typeof SponsorsSponsorIdRoute
   '/terms': typeof TermsRoute
   '/transparency': typeof TransparencyRoute
+  '/sponsors/$sponsorId': typeof SponsorsSponsorIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/admin' | '/privacy' | '/sponsors/$sponsorId' | '/terms' | '/transparency'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/privacy'
+    | '/terms'
+    | '/transparency'
+    | '/sponsors/$sponsorId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/admin' | '/privacy' | '/sponsors/$sponsorId' | '/terms' | '/transparency'
-  id: '__root__' | '/' | '/about' | '/admin' | '/privacy' | '/sponsors/$sponsorId' | '/terms' | '/transparency'
+  to:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/privacy'
+    | '/terms'
+    | '/transparency'
+    | '/sponsors/$sponsorId'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/privacy'
+    | '/terms'
+    | '/transparency'
+    | '/sponsors/$sponsorId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,9 +116,9 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
   PrivacyRoute: typeof PrivacyRoute
-  SponsorsSponsorIdRoute: typeof SponsorsSponsorIdRoute
   TermsRoute: typeof TermsRoute
   TransparencyRoute: typeof TransparencyRoute
+  SponsorsSponsorIdRoute: typeof SponsorsSponsorIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -129,13 +151,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sponsors/$sponsorId': {
-      id: '/sponsors/$sponsorId'
-      path: '/sponsors/$sponsorId'
-      fullPath: '/sponsors/$sponsorId'
-      preLoaderRoute: typeof SponsorsSponsorIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/terms': {
       id: '/terms'
       path: '/terms'
@@ -150,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TransparencyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sponsors/$sponsorId': {
+      id: '/sponsors/$sponsorId'
+      path: '/sponsors/$sponsorId'
+      fullPath: '/sponsors/$sponsorId'
+      preLoaderRoute: typeof SponsorsSponsorIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -158,9 +180,9 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
   PrivacyRoute: PrivacyRoute,
-  SponsorsSponsorIdRoute: SponsorsSponsorIdRoute,
   TermsRoute: TermsRoute,
   TransparencyRoute: TransparencyRoute,
+  SponsorsSponsorIdRoute: SponsorsSponsorIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

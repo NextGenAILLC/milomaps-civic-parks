@@ -9,7 +9,7 @@ import {
   siteById,
   type Sponsor,
 } from "@/lib/data";
-import type { PublicSponsor } from "@/lib/civic.server";
+import type { PublicSponsor } from "@/lib/civic";
 import { PRODUCT } from "@/lib/product";
 import { cn, formatUsd } from "@/lib/utils";
 
@@ -33,7 +33,7 @@ function SponsorShowcase() {
 
   useEffect(() => {
     let live = true;
-    void import("@/lib/civic.server")
+    void import("@/lib/civic")
       .then(({ getPublicSponsors }) => getPublicSponsors({ data: {} }))
       .then((rows) => {
         if (live) setSponsors(rows);

@@ -20,7 +20,7 @@ import {
   type Sponsor,
   type SiteId,
 } from "@/lib/data";
-import type { PublicSponsor } from "@/lib/civic.server";
+import type { PublicSponsor } from "@/lib/civic";
 import { NEIGHBOR_POST, PRODUCT, PUBLIC_SPLIT } from "@/lib/product";
 import { allProposals, useMilo } from "@/lib/store";
 import { toast } from "@/lib/toast";
@@ -59,7 +59,7 @@ function usePublicSponsors(siteId: SiteId) {
   useEffect(() => {
     let live = true;
     setSponsors(fallbackSponsors(siteId));
-    void import("@/lib/civic.server")
+    void import("@/lib/civic")
       .then(({ getPublicSponsors }) => getPublicSponsors({ data: { siteId } }))
       .then((rows) => {
         if (live) setSponsors(rows);

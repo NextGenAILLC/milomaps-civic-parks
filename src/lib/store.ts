@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { CHALLENGES, PROPOSALS, type Proposal, type SiteId } from "@/lib/data";
 import { PRODUCT } from "@/lib/product";
-import type { PublicActivityInput } from "@/lib/civic.server";
+import type { PublicActivityInput } from "@/lib/civic";
 
 export type TabId = "park" | "vote" | "checkin" | "fund" | "ledger";
 export type EventRow = { id: string; at: string; label: string; tokens: number };
@@ -63,7 +63,7 @@ const FOUR_HOURS = 4 * 60 * 60 * 1000;
 
 function syncActivity(activity: PublicActivityInput) {
   if (typeof window === "undefined") return;
-  void import("@/lib/civic.server")
+  void import("@/lib/civic")
     .then(({ recordPublicActivity }) => recordPublicActivity({ data: activity }))
     .catch((err) => {
       console.warn("[civic] activity sync skipped", err);
