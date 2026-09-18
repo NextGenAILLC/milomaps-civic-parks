@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ClipboardList, Footprints, Info, Landmark, MapPinned, Vote } from "lucide-react";
 import { ParkView, VoteView, CheckinView, FundView, LedgerView } from "@/components/views";
-import { useOnParksName } from "@/components/launch-name";
 import { Button } from "@/components/ui/button";
 import { SITES, siteById } from "@/lib/data";
 import { FAMILY, PRODUCT } from "@/lib/product";
 import { useMilo, type TabId } from "@/lib/store";
+import { useOnParksName } from "@/lib/use-on-parks-name";
 import { cn } from "@/lib/utils";
 
 const TABS: { id: TabId; label: string; icon: typeof MapPinned }[] = [

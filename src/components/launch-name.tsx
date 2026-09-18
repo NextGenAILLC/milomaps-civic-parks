@@ -1,19 +1,10 @@
-import { useEffect, useState } from "react";
 import { ExternalLink, Link2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useOnParksName } from "@/lib/use-on-parks-name";
 import { DOMAIN_LAUNCH, PRODUCT } from "@/lib/product";
 import { toast } from "@/lib/toast";
-
-export function useOnParksName() {
-  const [on, setOn] = useState(false);
-  useEffect(() => {
-    const host = window.location.hostname.replace(/^www\./, "");
-    setOn(host === DOMAIN_LAUNCH.canonicalHost || host === DOMAIN_LAUNCH.alternateHost);
-  }, []);
-  return on;
-}
 
 function copyText(text: string, ok: string) {
   void navigator.clipboard.writeText(text).then(

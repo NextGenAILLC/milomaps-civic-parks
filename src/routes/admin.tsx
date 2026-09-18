@@ -19,7 +19,7 @@ import {
   type SponsorStatus,
 } from "@/lib/data";
 import { PRODUCT } from "@/lib/product";
-import { formatUsd, formatWhen } from "@/lib/utils";
+import { formatWhen } from "@/lib/utils";
 
 export const Route = createFileRoute("/admin")({ component: AdminRoute });
 

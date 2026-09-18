@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LegalLayout } from "@/components/legal-layout";
-import { PRODUCT } from "@/lib/product";
 
 export const Route = createFileRoute("/privacy")({ component: Privacy });
 

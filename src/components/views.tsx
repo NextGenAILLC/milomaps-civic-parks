@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ParkMap } from "@/components/park-map";
-import { LaunchNameCard, useOnParksName } from "@/components/launch-name";
+import { LaunchNameCard } from "@/components/launch-name";
 import {
   CHALLENGES,
   CONCEPT_LEDGER,
@@ -24,6 +24,7 @@ import type { PublicSponsor } from "@/lib/civic";
 import { NEIGHBOR_POST, PRODUCT, PUBLIC_SPLIT } from "@/lib/product";
 import { allProposals, useMilo } from "@/lib/store";
 import { toast } from "@/lib/toast";
+import { useOnParksName } from "@/lib/use-on-parks-name";
 import { cn, formatUsd, formatWhen } from "@/lib/utils";
 
 function votesFor(p: Proposal, extra: number) {
