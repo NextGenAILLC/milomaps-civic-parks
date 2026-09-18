@@ -1,10 +1,12 @@
 # Milo Maps · Civic Parks
 
-Gift module for Kaukauna Dog Park and the Fox Valley.
+Neighbor-run Civic Parks board for Kaukauna Dog Park / Fox Valley Friends of the Dog Park style organizing.
 
-Canonical public address: **https://parks.milomaps.com**
+Canonical public address: **https://milomaps.org**
 
-Live now (same app, until the name is attached): **https://milomaps-parks.netlify.app**
+Alternate host that may still exist: **https://parks.milomaps.com**
+
+Netlify project host: **https://milomaps-parks.netlify.app**
 
 This does **not** replace [milomaps.com](https://milomaps.com) (Amber Trails). Civic Parks is a sibling module.
 
@@ -13,37 +15,62 @@ This does **not** replace [milomaps.com](https://milomaps.com) (Amber Trails). C
 - Check in at 366 Farmland Court
 - Vote on lighting, uneven ground, and access
 - PawSteps (no purchase required)
-- Sponsor packages record **intent only** — Stripe is not connected, cards are not charged
-- Public split when money does flow: **80% park / 15% operate / 5% steward**
+- A clear neighbor board + open ballot for an effectively ungoverned day-to-day park
+- Public copy that says this is **not a city app** and does **not** require city approval to collect community signal
+- Sponsor packages record **intent only** - Stripe is not connected, cards are not charged
+- Public split if real sponsor money is recorded: **80% park / 15% operate / 5% steward reserve**
 
 Neighbors never pay.
 
-## Attach parks.milomaps.com
+## Transparency / money path
 
-The same three clicks are on the Park tab in the app. `milomaps.com` DNS stays on Cloudflare. **Do not change nameservers, apex, or `www`.** Those are Amber Trails.
+- Sponsor and community money is **never held by a private individual operator**.
+- Funds for park/shelter improvements route only through a sponsoring bank or credit union, or a designated shelter partner, that opts in as a true sponsor.
+- That sponsor acts as transparent custodian/escrow for the specific park project.
+- Until a bank/CU/shelter partner sponsor exists, the app shows the model in plain language and does not pretend live payment wires exist.
+- Grey sponsor cards are prospects only. Color sponsor cards require admin to mark the sponsor **paid + active**.
 
-`parks.milomaps.com` already has a Cloudflare record, but it is **proxied (orange cloud) to Amber Trails**. Civic Parks is not attached on Netlify yet. The live host is behind Netlify team login until Project visibility is **Public**.
+Public route: `/transparency`
 
-Netlify cannot issue HTTPS while Cloudflare proxy is on. Use **DNS only (grey cloud)**. Do not move the zone to Netlify DNS.
+## Sponsors
 
-1. [Netlify → milomaps-parks → Visitor access](https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility) → Project visibility → **Public**. If Public is locked: Team settings → General → Visitor access → Default project visibility — turn off “Private for all projects.”
+Seeded prospects include Fox Valley banks, credit unions, vets, and local pet businesses. They are data-driven in `src/lib/data.ts` and seeded into `migrations/0001_civic_parks.sql`.
 
-2. Cloudflare → milomaps.com → DNS → **edit** the existing `parks` record (do not add a second one):
+Categories:
 
-| Type  | Name  | Target                       | Proxy status          |
-| ----- | ----- | ---------------------------- | --------------------- |
-| CNAME | parks | `milomaps-parks.netlify.app` | DNS only (grey cloud) |
+- `bank`
+- `credit_union`
+- `veterinary`
+- `other`
 
-Click the orange cloud so it turns grey. Save. Leave `@` and `www` alone.
+True sponsors get a public showcase at `/sponsors/$sponsorId`. Prospect routes stay muted and clearly labeled as not paid.
 
-3. [Netlify → milomaps-parks → Domain management](https://app.netlify.com/projects/milomaps-parks/domain-management) → Add domain `parks.milomaps.com`.
+Google Places can be wired later as an optional enhancement if an API key is present; the seed list is enough for v1.
 
-If Netlify asks for a TXT check, add this and retry:
+## Admin
 
-| Type | Name                      | Content (Netlify’s value) |
-| ---- | ------------------------- | ------------------------- |
-| TXT  | `netlify-challenge.parks` | the string they show      |
+Route: `/admin`
 
-Wait until `https://parks.milomaps.com` loads Civic Parks (Kaukauna, PawSteps, 80 / 15 / 5). Then the Facebook gift can go out.
+Required env var:
 
-Do **not** turn the Cloudflare proxy (orange cloud) back on until that page is Civic Parks with a working lock.
+- `ADMIN_PASSWORD` - server-side password for the operator admin route.
+
+Recommended env var for durable deploy data:
+
+- `DATABASE_URL` - Postgres connection string used by the existing `src/lib/db.ts` helper. Without it, local/preview runs use the existing in-memory PGLite fallback.
+
+Admin can:
+
+- See synced participants, check-ins, activity, and vote tallies
+- List sponsors
+- Toggle a prospect into a true sponsor by marking it paid + active
+- Mark custodian sponsors
+- Edit sponsor website, public note, and showcase copy
+
+No personal operator phone, email, or name is published by the public app.
+
+## Domains
+
+`milomaps.org` is canonical. `parks.milomaps.com` may still exist and should continue to work as an alternate Civic Parks host. Do not break either host.
+
+`milomaps.com` and `www.milomaps.com` remain Amber Trails.

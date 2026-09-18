@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { CHALLENGES, PROPOSALS, type Proposal, type SiteId } from "@/lib/data";
 import { PRODUCT } from "@/lib/product";
+import type { PublicActivityInput } from "@/lib/civic.server";
 
 export type TabId = "park" | "vote" | "checkin" | "fund" | "ledger";
 export type EventRow = { id: string; at: string; label: string; tokens: number };
@@ -60,6 +61,15 @@ function todayKey() {
 }
 const FOUR_HOURS = 4 * 60 * 60 * 1000;
 
+function syncActivity(activity: PublicActivityInput) {
+  if (typeof window === "undefined") return;
+  void import("@/lib/civic.server")
+    .then(({ recordPublicActivity }) => recordPublicActivity({ data: activity }))
+    .catch((err) => {
+      console.warn("[civic] activity sync skipped", err);
+    });
+}
+
 function grant(s: Pick<State, "challenges" | "tokens" | "events">, id: string): Partial<State> {
   if (s.challenges[id]) return {};
   const ch = CHALLENGES.find((c) => c.id === id);
@@ -104,8 +114,26 @@ export const useMilo = create<State>()(
       ...initial,
       setTab: (tab) => set({ tab }),
       setSite: (siteId) => set({ siteId, walkActive: false, walkProgress: 0 }),
-      setHandle: (handle) => set({ handle: handle.trim() || "Neighbor" }),
-      completeOnboard: (handle) => set({ onboarded: true, handle: handle.trim() || "Neighbor" }),
+      setHandle: (handle) => {
+        const nextHandle = handle.trim() || "Neighbor";
+        set({ handle: nextHandle });
+        syncActivity({
+          kind: "participant",
+          siteId: get().siteId,
+          participantHandle: nextHandle,
+          note: "Display name updated",
+        });
+      },
+      completeOnboard: (handle) => {
+        const nextHandle = handle.trim() || "Neighbor";
+        set({ onboarded: true, handle: nextHandle });
+        syncActivity({
+          kind: "participant",
+          siteId: get().siteId,
+          participantHandle: nextHandle,
+          note: "Neighbor entered Civic Parks",
+        });
+      },
       toggleNight: () => set((s) => ({ nightMode: !s.nightMode })),
       visit: (onSite) => {
         const now = Date.now();
@@ -132,6 +160,13 @@ export const useMilo = create<State>()(
           };
           return { ...next, ...grant({ ...s, ...next }, "first-visit") };
         });
+        syncActivity({
+          kind: "checkin",
+          siteId: get().siteId,
+          participantHandle: get().handle,
+          amount: gain,
+          note: onSite ? "On-site check-in" : "Park visit check-in",
+        });
         return {
           ok: true,
           message: onSite
@@ -155,6 +190,13 @@ export const useMilo = create<State>()(
             events: pushEvent(s.events, label, gain),
           };
           return { ...next, ...grant({ ...s, ...next }, "advocate") };
+        });
+        syncActivity({
+          kind: "access_report",
+          siteId: get().siteId,
+          participantHandle: get().handle,
+          amount: gain,
+          note: label,
         });
         return { ok: true, message: `Report filed. +${gain} ${PRODUCT.token}.` };
       },
@@ -197,6 +239,14 @@ export const useMilo = create<State>()(
           };
           return { ...next, ...grant({ ...cur, ...next }, "first-vote") };
         });
+        syncActivity({
+          kind: "vote",
+          siteId: proposal.siteId,
+          participantHandle: get().handle,
+          proposalId: proposal.id,
+          proposalTitle: proposal.title,
+          amount: spend,
+        });
         return { ok: true, message: `Cast ${spend} ${PRODUCT.token} for ${proposal.title}.` };
       },
       pledge: (amount) => {
@@ -208,6 +258,13 @@ export const useMilo = create<State>()(
           };
           return { ...next, ...grant({ ...s, ...next }, "patron") };
         });
+        syncActivity({
+          kind: "package_intent",
+          siteId,
+          participantHandle: get().handle,
+          amount,
+          note: "Package intent only; no checkout or charge",
+        });
       },
       addProposal: (draft) => {
         const id = `custom-${nid()}`;
@@ -217,16 +274,33 @@ export const useMilo = create<State>()(
           votes: { ...s.votes, [id]: 0 },
           events: pushEvent(s.events, `Filed concept: ${draft.title}`, 0),
         }));
+        syncActivity({
+          kind: "concept",
+          siteId: draft.siteId,
+          participantHandle: get().handle,
+          proposalId: id,
+          proposalTitle: draft.title,
+          note: draft.summary,
+        });
       },
       addComment: (proposalId, text) => {
         const trimmed = text.trim();
         if (!trimmed) return;
+        const proposal = PROPOSALS.find((p) => p.id === proposalId) || get().customProposals.find((p) => p.id === proposalId);
         set((s) => ({
           comments: [
             { id: nid(), proposalId, text: trimmed, at: new Date().toISOString(), author: s.handle },
             ...s.comments,
           ].slice(0, 80),
         }));
+        syncActivity({
+          kind: "comment",
+          siteId: proposal?.siteId ?? get().siteId,
+          participantHandle: get().handle,
+          proposalId,
+          proposalTitle: proposal?.title,
+          note: trimmed,
+        });
       },
       exportBundle: () => {
         const s = get();
