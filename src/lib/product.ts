@@ -2,7 +2,7 @@ export const PRODUCT = {
   brand: "Milo Maps",
   module: "civic-parks",
   moduleName: "Civic Parks",
-  version: "1.2.0",
+  version: "1.2.1",
   schema: "milomaps.civic.v1",
   token: "PawSteps",
   canonical: "https://parks.milomaps.com",
@@ -14,6 +14,8 @@ export const PRODUCT = {
   mapUrl: "https://milomaps.com/map",
   partnerUrl: "https://milomaps.com/pioneer",
   netlifyDomains: "https://app.netlify.com/projects/milomaps-parks/domain-management",
+  netlifyVisibility:
+    "https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility",
   region: "Fox Cities, Wisconsin",
   build: "solo-public-beta",
   payments: "intent-only",
@@ -41,12 +43,12 @@ export const DOMAIN_LAUNCH = {
   canonicalHost: "parks.milomaps.com",
   liveHost: "milomaps-parks.netlify.app",
   statusUntilAttached:
-    "parks.milomaps.com is on — but it is still Amber Trails, not Civic Parks. Two edits. Nothing else.",
+    "Civic Parks is built. Three clicks: make the live host Public, then the two DNS edits. parks.milomaps.com still loads Amber Trails.",
   statusAttached: "parks.milomaps.com is Civic Parks. Amber Trails stays on milomaps.com.",
   liveRows: [
     {
       address: "milomaps-parks.netlify.app",
-      loads: "Civic Parks — Kaukauna, PawSteps, 80 / 15 / 5, Stripe off",
+      loads: "Netlify login wall until Project visibility is Public. Then Civic Parks — Kaukauna, PawSteps, 80 / 15 / 5, Stripe off",
       href: "https://milomaps-parks.netlify.app",
     },
     {
@@ -60,8 +62,17 @@ export const DOMAIN_LAUNCH = {
       href: "https://www.milomaps.com",
     },
   ],
-  step1: {
+  stepPublic: {
     n: "1",
+    title: "Netlify — make the live host Public",
+    where: "Netlify → milomaps-parks → Project configuration → General → Visitor access → Project visibility → Public",
+    href: "https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility",
+    why: "The live module is a Netlify team login until this is Public. Neighbors cannot open it without that click.",
+    locked:
+      "If Public is locked: Team settings → General → Visitor access → Default project visibility. Turn off “Private for all projects,” then set this project to Public.",
+  },
+  step1: {
+    n: "2",
     title: "Cloudflare — edit the existing parks record",
     where: "Cloudflare → milomaps.com → DNS → edit parks. Do not add a second parks record. Leave @ and www alone.",
     type: "CNAME",
@@ -72,7 +83,7 @@ export const DOMAIN_LAUNCH = {
       "Click the orange cloud so it turns grey. Orange in front of Netlify blocks their HTTPS certificate. Grey first. Orange later only after Civic Parks loads with a lock.",
   },
   step2: {
-    n: "2",
+    n: "3",
     title: "Netlify — add the name",
     where: "Netlify → milomaps-parks → Domain management → Add domain parks.milomaps.com",
     domain: "parks.milomaps.com",

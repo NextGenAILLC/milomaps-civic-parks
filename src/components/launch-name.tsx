@@ -42,6 +42,7 @@ function CopyRow({ label, value, hint }: { label: string; value: string; hint?: 
 
 export function LaunchNameCard() {
   const onName = useOnParksName();
+  const s0 = DOMAIN_LAUNCH.stepPublic;
   const s1 = DOMAIN_LAUNCH.step1;
   const s2 = DOMAIN_LAUNCH.step2;
 
@@ -71,7 +72,7 @@ export function LaunchNameCard() {
       <CardHeader>
         <div className="flex items-center gap-2">
           <Badge>Launching now</Badge>
-          <span className="text-xs text-subtle">Two edits. Nothing else.</span>
+          <span className="text-xs text-subtle">Public first, then two DNS edits.</span>
         </div>
         <CardTitle className="flex items-center gap-2">
           <Link2 className="size-4" />
@@ -97,6 +98,22 @@ export function LaunchNameCard() {
               </li>
             ))}
           </ul>
+        </section>
+
+        <section className="rounded-md border border-border bg-bg p-4">
+          <p className="font-display text-lg font-medium">
+            {s0.n}. {s0.title}
+          </p>
+          <p className="mt-1 text-sm text-muted">{s0.where}</p>
+          <p className="mt-2 text-sm text-muted">{s0.why}</p>
+          <p className="mt-2 text-sm text-muted">{s0.locked}</p>
+          <Button
+            className="mt-3 w-full"
+            onClick={() => window.open(s0.href, "_blank", "noopener,noreferrer")}
+          >
+            Open visitor access — set Public
+            <ExternalLink className="size-4" />
+          </Button>
         </section>
 
         <section className="rounded-md border border-border bg-bg p-4">

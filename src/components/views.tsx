@@ -86,9 +86,9 @@ function GiftCard() {
       <CardContent className="flex flex-col gap-3">
         {onName ? null : (
           <p className="rounded-md border border-border bg-bg p-3 text-sm text-muted">
-            Right now parks.milomaps.com still shows Amber Trails. Finish the two launch edits
-            first. Neighbors should land on Kaukauna, PawSteps, and 80 / 15 / 5 — not the parent
-            trail map.
+            Right now the live host is a Netlify login, and parks.milomaps.com still shows Amber
+            Trails. Finish Public, then the two DNS edits. Neighbors should land on Kaukauna,
+            PawSteps, and 80 / 15 / 5 — not a login wall or the parent trail map.
           </p>
         )}
         <pre className="whitespace-pre-wrap rounded-md border border-border bg-bg p-3 text-sm text-muted">

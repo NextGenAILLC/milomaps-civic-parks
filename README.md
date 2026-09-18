@@ -20,15 +20,15 @@ Neighbors never pay.
 
 ## Attach parks.milomaps.com
 
-The same two edits are on the Park tab in the app. `milomaps.com` DNS stays on Cloudflare. **Do not change nameservers, apex, or `www`.** Those are Amber Trails.
+The same three clicks are on the Park tab in the app. `milomaps.com` DNS stays on Cloudflare. **Do not change nameservers, apex, or `www`.** Those are Amber Trails.
 
-`parks.milomaps.com` already has a Cloudflare record, but it is **proxied (orange cloud) to Amber Trails**. Civic Parks is not attached on Netlify yet.
+`parks.milomaps.com` already has a Cloudflare record, but it is **proxied (orange cloud) to Amber Trails**. Civic Parks is not attached on Netlify yet. The live host is behind Netlify team login until Project visibility is **Public**.
 
 Netlify cannot issue HTTPS while Cloudflare proxy is on. Use **DNS only (grey cloud)**. Do not move the zone to Netlify DNS.
 
-Two edits. Nothing else.
+1. [Netlify → milomaps-parks → Visitor access](https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility) → Project visibility → **Public**. If Public is locked: Team settings → General → Visitor access → Default project visibility — turn off “Private for all projects.”
 
-1. Cloudflare → milomaps.com → DNS → **edit** the existing `parks` record (do not add a second one):
+2. Cloudflare → milomaps.com → DNS → **edit** the existing `parks` record (do not add a second one):
 
 | Type  | Name  | Target                       | Proxy status          |
 | ----- | ----- | ---------------------------- | --------------------- |
@@ -36,7 +36,7 @@ Two edits. Nothing else.
 
 Click the orange cloud so it turns grey. Save. Leave `@` and `www` alone.
 
-2. [Netlify → milomaps-parks → Domain management](https://app.netlify.com/projects/milomaps-parks/domain-management) → Add domain `parks.milomaps.com`.
+3. [Netlify → milomaps-parks → Domain management](https://app.netlify.com/projects/milomaps-parks/domain-management) → Add domain `parks.milomaps.com`.
 
 If Netlify asks for a TXT check, add this and retry:
 

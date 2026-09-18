@@ -60,7 +60,7 @@ export function AppShell() {
           className="bg-primary px-4 py-1.5 text-center text-xs text-primary-fg"
           onClick={() => setTab("park")}
         >
-          Launching now · two edits on Park · do not share Facebook until parks is Civic Parks
+          Launching now · Public, then two DNS edits on Park · do not share Facebook yet
         </button>
       )}
       <header className="sticky top-0 z-20 border-b border-border bg-bg/90 px-4 py-3 backdrop-blur-sm">
