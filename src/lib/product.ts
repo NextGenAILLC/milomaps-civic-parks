@@ -24,7 +24,6 @@ export const PRODUCT = {
 
 export const FAMILY = [
   { label: "Civic Parks", href: "https://milomaps.org", here: true },
-  { label: "Parks host", href: "https://parks.milomaps.com", here: false },
   { label: "Amber Trails", href: "https://milomaps.com", here: false },
   { label: "Map", href: "https://milomaps.com/map", here: false },
   { label: "Story", href: "https://milomaps.com/story", here: false },
