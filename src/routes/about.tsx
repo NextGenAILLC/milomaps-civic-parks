@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LegalLayout } from "@/components/legal-layout";
-import { LaunchNameCard } from "@/components/launch-name";
 import { PRODUCT, PUBLIC_SPLIT } from "@/lib/product";
 
 export const Route = createFileRoute("/about")({ component: About });
@@ -13,13 +12,12 @@ function About() {
         <a className="text-fg underline" href={PRODUCT.parentUrl}>
           milomaps.com
         </a>
-        . Civic Parks is the neighbor-board and park-ballot module at{" "}
+        . Civic Parks is the neighbor board and park ballot at{" "}
         <a className="text-fg underline" href={PRODUCT.canonical}>
           milomaps.org
         </a>
-        . parks.milomaps.com may still point here as an alternate host.
+        .
       </p>
-      <LaunchNameCard />
       <p>
         The public posture is simple: not a city app, no city approval required to collect
         community signal, and no personal operator identity as the public face.
