@@ -14,6 +14,8 @@ export const PRODUCT = {
   mapUrl: "https://milomaps.com/map",
   partnerUrl: "https://milomaps.com/pioneer",
   netlifyDomains: "https://app.netlify.com/projects/milomaps-parks/domain-management",
+  netlifyVisibility:
+    "https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility",
   region: "Fox Cities, Wisconsin",
   build: "solo-public-beta",
   payments: "intent-only",
@@ -41,10 +43,17 @@ export const DOMAIN_LAUNCH = {
   canonicalHost: "parks.milomaps.com",
   liveHost: "milomaps-parks.netlify.app",
   statusUntilAttached:
-    "Civic Parks is live. parks.milomaps.com is on, but it still loads Amber Trails until the two edits below.",
+    "Civic Parks is built. Three clicks from here: make the live host public, then attach the name. parks.milomaps.com still loads Amber Trails until DNS is edited.",
   statusAttached: "parks.milomaps.com is Civic Parks. Amber Trails stays on milomaps.com.",
-  step1: {
+  stepPublic: {
     n: "1",
+    title: "Netlify — make the live host public",
+    where: "Netlify → milomaps-parks → Project configuration → General → Visitor access → Project visibility → Public",
+    href: "https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility",
+    why: "The live module is behind a Netlify team login until this is Public. Neighbors cannot open milomaps-parks.netlify.app without it.",
+  },
+  step1: {
+    n: "2",
     title: "Cloudflare",
     where: "Cloudflare → milomaps.com → DNS → Edit the existing parks record. Do not add a second one.",
     type: "CNAME",
@@ -54,7 +63,7 @@ export const DOMAIN_LAUNCH = {
     proxyHow: "Click the orange cloud so it turns grey. Leave it grey until Civic Parks loads with a lock.",
   },
   step2: {
-    n: "2",
+    n: "3",
     title: "Netlify",
     where: "Netlify → milomaps-parks → Domain management → Add domain parks.milomaps.com",
     domain: "parks.milomaps.com",

@@ -86,7 +86,7 @@ function GiftCard() {
       <CardContent className="flex flex-col gap-3">
         {onName ? null : (
           <p className="rounded-md border border-border bg-bg p-3 text-sm text-muted">
-            Right now parks.milomaps.com still shows Amber Trails. Finish the two launch steps on
+            Right now parks.milomaps.com still shows Amber Trails. Finish the three launch steps on
             this tab first. Neighbors should land on Kaukauna, PawSteps, and 80 / 15 / 5 — not the
             parent trail map.
           </p>

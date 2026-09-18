@@ -26,9 +26,11 @@ Neighbors never pay.
 
 Netlify cannot issue HTTPS while Cloudflare proxy is on. Use **DNS only (grey cloud)**. Do not move the zone to Netlify DNS.
 
-Two edits. Nothing else.
+Three edits. Nothing else. They are also on the Fund tab in the app.
 
-1. Cloudflare → milomaps.com → DNS → **edit** the existing `parks` record (do not add a second one):
+1. [Netlify → milomaps-parks → Visitor access](https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility) → Project visibility → **Public**. The live host is behind a Netlify team login until this is Public.
+
+2. Cloudflare → milomaps.com → DNS → **edit** the existing `parks` record (do not add a second one):
 
 | Type  | Name  | Target                       | Proxy status        |
 | ----- | ----- | ---------------------------- | ------------------- |
@@ -36,7 +38,7 @@ Two edits. Nothing else.
 
 Click the orange cloud so it turns grey. Save. Leave `@` and `www` alone.
 
-2. [Netlify → milomaps-parks → Domain management](https://app.netlify.com/projects/milomaps-parks/domain-management) → Add domain `parks.milomaps.com`.
+3. [Netlify → milomaps-parks → Domain management](https://app.netlify.com/projects/milomaps-parks/domain-management) → Add domain `parks.milomaps.com`.
 
 If Netlify asks for a TXT check, add this and retry:
 

@@ -60,7 +60,7 @@ export function AppShell() {
           className="bg-primary px-4 py-1.5 text-center text-xs text-primary-fg"
           onClick={() => setTab("fund")}
         >
-          Launching tonight · Civic Parks is live · parks still shows Amber Trails — tap for the two steps
+          Launching tonight · first make milomaps-parks Public, then the DNS steps on Fund
         </button>
       )}
       <header className="sticky top-0 z-20 border-b border-border bg-bg/90 px-4 py-3 backdrop-blur-sm">
