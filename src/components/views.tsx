@@ -86,9 +86,9 @@ function GiftCard() {
       <CardContent className="flex flex-col gap-3">
         {onName ? null : (
           <p className="rounded-md border border-border bg-bg p-3 text-sm text-muted">
-            Right now parks.milomaps.com still shows Amber Trails. Finish the three launch steps on
-            this tab first. Neighbors should land on Kaukauna, PawSteps, and 80 / 15 / 5 — not the
-            parent trail map.
+            Right now parks.milomaps.com still shows Amber Trails. Finish the two launch edits
+            first. Neighbors should land on Kaukauna, PawSteps, and 80 / 15 / 5 — not the parent
+            trail map.
           </p>
         )}
         <pre className="whitespace-pre-wrap rounded-md border border-border bg-bg p-3 text-sm text-muted">
@@ -115,9 +115,11 @@ export function ParkView() {
   const challenges = useMilo((s) => s.challenges);
   const site = siteById(siteId);
   const done = CHALLENGES.filter((c) => challenges[c.id]).length;
+  const onName = useOnParksName();
 
   return (
     <div className="flex flex-col gap-6">
+      {onName ? null : <LaunchNameCard />}
       <header className="flex flex-col gap-3">
         <h1 className="font-display text-3xl font-medium tracking-tight text-fg sm:text-4xl">{site.name}</h1>
         <p className="max-w-xl text-muted">{site.blurb}</p>

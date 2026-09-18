@@ -20,32 +20,30 @@ Neighbors never pay.
 
 ## Attach parks.milomaps.com
 
-`milomaps.com` DNS stays on Cloudflare. **Do not change nameservers, apex, or `www`.** Those are Amber Trails.
+The same two edits are on the Park tab in the app. `milomaps.com` DNS stays on Cloudflare. **Do not change nameservers, apex, or `www`.** Those are Amber Trails.
 
-`parks.milomaps.com` already has a Cloudflare record, but it is **proxied (orange cloud) to Amber Trails**. Civic Parks is not attached on Netlify yet, so the name still shows the wrong product.
+`parks.milomaps.com` already has a Cloudflare record, but it is **proxied (orange cloud) to Amber Trails**. Civic Parks is not attached on Netlify yet.
 
 Netlify cannot issue HTTPS while Cloudflare proxy is on. Use **DNS only (grey cloud)**. Do not move the zone to Netlify DNS.
 
-Three edits. Nothing else. They are also on the Fund tab in the app.
+Two edits. Nothing else.
 
-1. [Netlify → milomaps-parks → Visitor access](https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility) → Project visibility → **Public**. The live host is behind a Netlify team login until this is Public.
+1. Cloudflare → milomaps.com → DNS → **edit** the existing `parks` record (do not add a second one):
 
-2. Cloudflare → milomaps.com → DNS → **edit** the existing `parks` record (do not add a second one):
-
-| Type  | Name  | Target                       | Proxy status        |
-| ----- | ----- | ---------------------------- | ------------------- |
+| Type  | Name  | Target                       | Proxy status          |
+| ----- | ----- | ---------------------------- | --------------------- |
 | CNAME | parks | `milomaps-parks.netlify.app` | DNS only (grey cloud) |
 
 Click the orange cloud so it turns grey. Save. Leave `@` and `www` alone.
 
-3. [Netlify → milomaps-parks → Domain management](https://app.netlify.com/projects/milomaps-parks/domain-management) → Add domain `parks.milomaps.com`.
+2. [Netlify → milomaps-parks → Domain management](https://app.netlify.com/projects/milomaps-parks/domain-management) → Add domain `parks.milomaps.com`.
 
 If Netlify asks for a TXT check, add this and retry:
 
-| Type | Name                               | Content (Netlify’s value) |
-| ---- | ---------------------------------- | ------------------------- |
-| TXT  | `netlify-challenge.parks`          | the string they show      |
+| Type | Name                      | Content (Netlify’s value) |
+| ---- | ------------------------- | ------------------------- |
+| TXT  | `netlify-challenge.parks` | the string they show      |
 
 Wait until `https://parks.milomaps.com` loads Civic Parks (Kaukauna, PawSteps, 80 / 15 / 5). Then the Facebook gift can go out.
 
-Do **not** turn the Cloudflare proxy (orange cloud) back on until that page is Civic Parks with a working lock. Orange in front of Netlify blocks Let’s Encrypt unless a custom origin certificate is installed.
+Do **not** turn the Cloudflare proxy (orange cloud) back on until that page is Civic Parks with a working lock.

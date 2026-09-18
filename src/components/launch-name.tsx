@@ -30,7 +30,6 @@ function CopyRow({ label, value, hint }: { label: string; value: string; hint?: 
         {hint ? <p className="mt-1 text-xs text-muted">{hint}</p> : null}
       </div>
       <Button
-        size="sm"
         variant="secondary"
         className="shrink-0"
         onClick={() => copyText(value, `${label} copied.`)}
@@ -43,7 +42,6 @@ function CopyRow({ label, value, hint }: { label: string; value: string; hint?: 
 
 export function LaunchNameCard() {
   const onName = useOnParksName();
-  const s0 = DOMAIN_LAUNCH.stepPublic;
   const s1 = DOMAIN_LAUNCH.step1;
   const s2 = DOMAIN_LAUNCH.step2;
 
@@ -60,8 +58,8 @@ export function LaunchNameCard() {
         </CardHeader>
         <CardContent className="flex flex-col gap-3 text-sm text-muted">
           <p>
-            Copy the gift post and share it. Neighbors land here. Stripe stays off. Split stays 80 /
-            15 / 5.
+            Copy the gift post on Fund and share it. Neighbors land here. Stripe stays off. Split
+            stays 80 / 15 / 5.
           </p>
         </CardContent>
       </Card>
@@ -73,7 +71,7 @@ export function LaunchNameCard() {
       <CardHeader>
         <div className="flex items-center gap-2">
           <Badge>Launching now</Badge>
-          <span className="text-xs text-subtle">Three edits. Nothing else.</span>
+          <span className="text-xs text-subtle">Two edits. Nothing else.</span>
         </div>
         <CardTitle className="flex items-center gap-2">
           <Link2 className="size-4" />
@@ -82,25 +80,23 @@ export function LaunchNameCard() {
         <CardDescription>{DOMAIN_LAUNCH.statusUntilAttached}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
-        <div>
-          <p className="text-xs uppercase tracking-wide text-subtle">Civic Parks is already here</p>
-          <CopyRow label="Live now" value={PRODUCT.liveNow} />
-          <CopyRow label="Public name" value={DOMAIN_LAUNCH.canonicalHost} />
-        </div>
-
-        <section className="rounded-md border border-border bg-bg p-4">
-          <p className="font-display text-lg font-medium">
-            {s0.n}. {s0.title}
-          </p>
-          <p className="mt-1 text-sm text-muted">{s0.where}</p>
-          <p className="mt-2 text-sm text-muted">{s0.why}</p>
-          <Button
-            className="mt-3 w-full"
-            onClick={() => window.open(s0.href, "_blank", "noopener,noreferrer")}
-          >
-            Open visitor access — set Public
-            <ExternalLink className="size-4" />
-          </Button>
+        <section>
+          <p className="text-xs uppercase tracking-wide text-subtle">What is live right now</p>
+          <ul className="mt-2">
+            {DOMAIN_LAUNCH.liveRows.map((row) => (
+              <li key={row.address} className="border-t border-border py-3 first:border-0 first:pt-0">
+                <a
+                  href={row.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="break-all font-mono text-sm text-fg underline-offset-2 hover:underline"
+                >
+                  {row.address}
+                </a>
+                <p className="mt-1 text-sm text-muted">{row.loads}</p>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section className="rounded-md border border-border bg-bg p-4">
@@ -153,6 +149,11 @@ export function LaunchNameCard() {
             ))}
           </ul>
         </section>
+
+        <p className="text-sm text-muted">
+          After both edits are saved, open parks.milomaps.com. When it is Civic Parks — Kaukauna,
+          PawSteps, 80 / 15 / 5 — the gift post on Fund is safe to share.
+        </p>
       </CardContent>
     </Card>
   );

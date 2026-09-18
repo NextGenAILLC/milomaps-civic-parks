@@ -2,7 +2,7 @@ export const PRODUCT = {
   brand: "Milo Maps",
   module: "civic-parks",
   moduleName: "Civic Parks",
-  version: "1.1.0",
+  version: "1.2.0",
   schema: "milomaps.civic.v1",
   token: "PawSteps",
   canonical: "https://parks.milomaps.com",
@@ -14,8 +14,6 @@ export const PRODUCT = {
   mapUrl: "https://milomaps.com/map",
   partnerUrl: "https://milomaps.com/pioneer",
   netlifyDomains: "https://app.netlify.com/projects/milomaps-parks/domain-management",
-  netlifyVisibility:
-    "https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility",
   region: "Fox Cities, Wisconsin",
   build: "solo-public-beta",
   payments: "intent-only",
@@ -43,34 +41,45 @@ export const DOMAIN_LAUNCH = {
   canonicalHost: "parks.milomaps.com",
   liveHost: "milomaps-parks.netlify.app",
   statusUntilAttached:
-    "Civic Parks is built. Three clicks from here: make the live host public, then attach the name. parks.milomaps.com still loads Amber Trails until DNS is edited.",
+    "parks.milomaps.com is on — but it is still Amber Trails, not Civic Parks. Two edits. Nothing else.",
   statusAttached: "parks.milomaps.com is Civic Parks. Amber Trails stays on milomaps.com.",
-  stepPublic: {
-    n: "1",
-    title: "Netlify — make the live host public",
-    where: "Netlify → milomaps-parks → Project configuration → General → Visitor access → Project visibility → Public",
-    href: "https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility",
-    why: "The live module is behind a Netlify team login until this is Public. Neighbors cannot open milomaps-parks.netlify.app without it.",
-  },
+  liveRows: [
+    {
+      address: "milomaps-parks.netlify.app",
+      loads: "Civic Parks — Kaukauna, PawSteps, 80 / 15 / 5, Stripe off",
+      href: "https://milomaps-parks.netlify.app",
+    },
+    {
+      address: "parks.milomaps.com",
+      loads: "Amber Trails — Cloudflare orange-cloud, wrong origin until you edit DNS",
+      href: "https://parks.milomaps.com",
+    },
+    {
+      address: "milomaps.com / www",
+      loads: "Amber Trails — untouched. Do not change.",
+      href: "https://www.milomaps.com",
+    },
+  ],
   step1: {
-    n: "2",
-    title: "Cloudflare",
-    where: "Cloudflare → milomaps.com → DNS → Edit the existing parks record. Do not add a second one.",
+    n: "1",
+    title: "Cloudflare — edit the existing parks record",
+    where: "Cloudflare → milomaps.com → DNS → edit parks. Do not add a second parks record. Leave @ and www alone.",
     type: "CNAME",
     name: "parks",
     target: "milomaps-parks.netlify.app",
     proxy: "DNS only (grey cloud)",
-    proxyHow: "Click the orange cloud so it turns grey. Leave it grey until Civic Parks loads with a lock.",
+    proxyHow:
+      "Click the orange cloud so it turns grey. Orange in front of Netlify blocks their HTTPS certificate. Grey first. Orange later only after Civic Parks loads with a lock.",
   },
   step2: {
-    n: "3",
-    title: "Netlify",
+    n: "2",
+    title: "Netlify — add the name",
     where: "Netlify → milomaps-parks → Domain management → Add domain parks.milomaps.com",
     domain: "parks.milomaps.com",
     href: "https://app.netlify.com/projects/milomaps-parks/domain-management",
     txtType: "TXT",
     txtName: "netlify-challenge.parks",
-    txtHint: "Only if Netlify asks — paste the string they show.",
+    txtHint: "Only if Netlify asks — paste the string they show as the content.",
   },
   leaveAlone: [
     { name: "@ / milomaps.com", reason: "Amber Trails apex — do not change" },
@@ -80,7 +89,7 @@ export const DOMAIN_LAUNCH = {
   doNot: [
     "Do not post the Facebook gift until parks.milomaps.com loads Civic Parks — Kaukauna, PawSteps, 80 / 15 / 5, Stripe off.",
     "Do not leave the parks cloud orange while attaching. Grey first.",
-    "Stripe stays off. Neighbors still never pay.",
+    "Stripe stays off. Neighbors still never pay. Same 80 / 15 / 5.",
   ],
 } as const;
 

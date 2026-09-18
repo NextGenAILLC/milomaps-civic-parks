@@ -2,7 +2,7 @@
   "schema": "milomaps.civic.v1",
   "brand": "Milo Maps",
   "module": "civic-parks",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "canonical": "https://parks.milomaps.com",
   "liveNow": "https://milomaps-parks.netlify.app",
   "parent": "https://milomaps.com",

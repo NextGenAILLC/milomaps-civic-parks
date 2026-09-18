@@ -58,9 +58,9 @@ export function AppShell() {
         <button
           type="button"
           className="bg-primary px-4 py-1.5 text-center text-xs text-primary-fg"
-          onClick={() => setTab("fund")}
+          onClick={() => setTab("park")}
         >
-          Launching tonight · first make milomaps-parks Public, then the DNS steps on Fund
+          Launching now · two edits on Park · do not share Facebook until parks is Civic Parks
         </button>
       )}
       <header className="sticky top-0 z-20 border-b border-border bg-bg/90 px-4 py-3 backdrop-blur-sm">
