@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ClipboardList, Footprints, Info, Landmark, MapPinned, Vote } from "lucide-react";
 import { ParkView, VoteView, CheckinView, FundView, LedgerView } from "@/components/views";
-import { useOnParksName } from "@/components/launch-name";
 import { Button } from "@/components/ui/button";
 import { SITES, siteById } from "@/lib/data";
 import { FAMILY, PRODUCT } from "@/lib/product";
 import { useMilo, type TabId } from "@/lib/store";
+import { useOnParksName } from "@/lib/use-on-parks-name";
 import { cn } from "@/lib/utils";
 
 const TABS: { id: TabId; label: string; icon: typeof MapPinned }[] = [
   { id: "park", label: "Park", icon: MapPinned },
   { id: "vote", label: "Vote", icon: Vote },
   { id: "checkin", label: "Check in", icon: Footprints },
-  { id: "fund", label: "Fund", icon: Landmark },
+  { id: "fund", label: "Sponsors", icon: Landmark },
   { id: "ledger", label: "Ledger", icon: ClipboardList },
 ];
 
@@ -52,7 +52,7 @@ export function AppShell() {
     <div className="mx-auto flex min-h-dvh max-w-lg flex-col bg-bg">
       {onParksName ? (
         <div className="bg-primary px-4 py-1.5 text-center text-xs text-primary-fg">
-          parks.milomaps.com · a {PRODUCT.brand} module · same family as {PRODUCT.parentProduct}
+          milomaps.org · neighbor board · open ballot · not a city app
         </div>
       ) : (
         <button
@@ -60,7 +60,7 @@ export function AppShell() {
           className="bg-primary px-4 py-1.5 text-center text-xs text-primary-fg"
           onClick={() => setTab("park")}
         >
-          Launching now · Public, then two DNS edits on Park · do not share Facebook yet
+          Neighbor board · open ballot · not a city app · no city approval required
         </button>
       )}
       <header className="sticky top-0 z-20 border-b border-border bg-bg/90 px-4 py-3 backdrop-blur-sm">
@@ -164,12 +164,11 @@ export function AppShell() {
           <div className="w-full max-w-md rounded-xl border border-border bg-surface p-5 text-fg shadow-soft">
             {step === 0 ? (
               <>
-                <p className="text-xs text-subtle">parks.milomaps.com · {PRODUCT.brand}</p>
+                <p className="text-xs text-subtle">milomaps.org · {PRODUCT.brand}</p>
                 <p className="mt-1 font-display text-2xl font-medium tracking-tight">Vote the park you walk</p>
                 <p className="mt-2 text-sm text-muted">
-                  Civic Parks is a {PRODUCT.brand} module — same family as {PRODUCT.parentProduct}. PawSteps,
-                  parks, and a public split. Cards are not charged on this beta. The public name is
-                  parks.milomaps.com. Until that name is attached, you are already on the live module.
+                  Civic Parks is a neighbor-run board for park regulars. It is not a city app, does
+                  not imply city approval, and keeps PawSteps voting free.
                 </p>
                 <Button className="mt-5 w-full" onClick={() => setStep(1)}>
                   Continue
@@ -182,7 +181,10 @@ export function AppShell() {
                 <ul className="mt-3 flex flex-col gap-2 text-sm text-muted">
                   <li>Show up, walk, or file a barrier. That mints {PRODUCT.token}.</li>
                   <li>Spend them on lighting, access, seating, winter routes.</li>
-                  <li>Shops can fund later. Neighbors never pay. Split is 80 / 15 / 5.</li>
+                  <li>
+                    True sponsors can fund later through a transparent bank, credit union, or shelter
+                    partner. Neighbors never pay.
+                  </li>
                 </ul>
                 <Button className="mt-5 w-full" onClick={() => setStep(2)}>
                   Continue

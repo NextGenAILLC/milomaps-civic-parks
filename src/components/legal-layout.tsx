@@ -6,7 +6,7 @@ export function LegalLayout({ title, children }: { title: string; children: Reac
   return (
     <div className="mx-auto min-h-dvh max-w-lg bg-bg px-4 py-8 text-fg">
       <p className="text-xs text-subtle">
-        {PRODUCT.brand} · {PRODUCT.moduleName} · parks.milomaps.com
+        {PRODUCT.brand} · {PRODUCT.moduleName} · milomaps.org
       </p>
       <h1 className="mt-2 font-display text-3xl font-medium tracking-tight">{title}</h1>
       <div className="mt-6 flex flex-col gap-4 text-sm text-muted">{children}</div>

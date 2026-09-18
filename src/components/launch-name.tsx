@@ -1,18 +1,10 @@
-import { useEffect, useState } from "react";
 import { ExternalLink, Link2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useOnParksName } from "@/lib/use-on-parks-name";
 import { DOMAIN_LAUNCH, PRODUCT } from "@/lib/product";
 import { toast } from "@/lib/toast";
-
-export function useOnParksName() {
-  const [on, setOn] = useState(false);
-  useEffect(() => {
-    setOn(window.location.hostname.replace(/^www\./, "") === DOMAIN_LAUNCH.canonicalHost);
-  }, []);
-  return on;
-}
 
 function copyText(text: string, ok: string) {
   void navigator.clipboard.writeText(text).then(
@@ -59,8 +51,8 @@ export function LaunchNameCard() {
         </CardHeader>
         <CardContent className="flex flex-col gap-3 text-sm text-muted">
           <p>
-            Copy the gift post on Fund and share it. Neighbors land here. Stripe stays off. Split
-            stays 80 / 15 / 5.
+            Neighbors land on a board and open ballot. Stripe is not connected, and sponsor money
+            requires a true custodian sponsor before anything moves.
           </p>
         </CardContent>
       </Card>
@@ -71,12 +63,12 @@ export function LaunchNameCard() {
     <Card className="border-primary text-fg">
       <CardHeader>
         <div className="flex items-center gap-2">
-          <Badge>Launching now</Badge>
-          <span className="text-xs text-subtle">Public first, then two DNS edits.</span>
+          <Badge>Host status</Badge>
+          <span className="text-xs text-subtle">Canonical host is milomaps.org.</span>
         </div>
         <CardTitle className="flex items-center gap-2">
           <Link2 className="size-4" />
-          Attach parks.milomaps.com
+          Civic Parks domains
         </CardTitle>
         <CardDescription>{DOMAIN_LAUNCH.statusUntilAttached}</CardDescription>
       </CardHeader>
@@ -168,8 +160,9 @@ export function LaunchNameCard() {
         </section>
 
         <p className="text-sm text-muted">
-          After both edits are saved, open parks.milomaps.com. When it is Civic Parks — Kaukauna,
-          PawSteps, 80 / 15 / 5 — the gift post on Fund is safe to share.
+          The same app may answer on milomaps.org, parks.milomaps.com, and the Netlify project host.
+          The public message should stay consistent on each host: neighbor board, open ballot, no
+          checkout, and not a city app.
         </p>
       </CardContent>
     </Card>
