@@ -1,31 +1,37 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Accessibility, Footprints, Landmark, MapPin, Shield, Sun, Trees, Wallet } from "lucide-react";
+import { Accessibility, Building2, Footprints, Landmark, MapPin, Shield, Sun, Trees, Wallet } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ParkMap } from "@/components/park-map";
+import { LaunchNameCard } from "@/components/launch-name";
 import {
   CHALLENGES,
   CONCEPT_LEDGER,
   PACKAGES,
+  SPONSOR_CATEGORY_LABELS,
   SPONSORS,
   TAGS,
   haversineM,
   siteById,
   type Proposal,
+  type Sponsor,
+  type SiteId,
 } from "@/lib/data";
-import { GIFT_POST, PRODUCT, PUBLIC_SPLIT } from "@/lib/product";
+import type { PublicSponsor } from "@/lib/civic";
+import { NEIGHBOR_POST, PRODUCT, PUBLIC_SPLIT } from "@/lib/product";
 import { allProposals, useMilo } from "@/lib/store";
 import { toast } from "@/lib/toast";
-import { formatUsd, formatWhen } from "@/lib/utils";
+import { useOnParksName } from "@/lib/use-on-parks-name";
+import { cn, formatUsd, formatWhen } from "@/lib/utils";
 
 function votesFor(p: Proposal, extra: number) {
   return p.voteSeed + extra;
 }
-function fundedFor(p: Proposal, extraPledge: number, siteCost: number) {
-  const share = siteCost > 0 ? extraPledge * (p.cost / siteCost) : 0;
+function fundedFor(p: Proposal, activeSponsorDollars: number, siteCost: number) {
+  const share = siteCost > 0 ? activeSponsorDollars * (p.cost / siteCost) : 0;
   return Math.min(p.cost, p.sponsorSeed + share);
 }
 function statusLabel(funded: number, cost: number) {
@@ -35,14 +41,49 @@ function statusLabel(funded: number, cost: number) {
   return "On ballot";
 }
 
-function copyGift() {
-  void navigator.clipboard.writeText(GIFT_POST).then(
-    () => toast("Gift post copied. Paste it into the group as-is."),
-    () => toast("Copy failed. The text is on the Fund tab."),
+function isTrueSponsor(sponsor: Pick<Sponsor, "status" | "paid">) {
+  return sponsor.status === "active" && sponsor.paid;
+}
+
+function activeSponsorTotal(sponsors: Pick<Sponsor, "status" | "paid" | "pledged">[]) {
+  return sponsors.filter(isTrueSponsor).reduce((sum, sponsor) => sum + sponsor.pledged, 0);
+}
+
+function fallbackSponsors(siteId: SiteId): PublicSponsor[] {
+  const now = new Date().toISOString();
+  return SPONSORS.filter((s) => s.siteId === siteId).map((s) => ({ ...s, updatedAt: now }));
+}
+
+function usePublicSponsors(siteId: SiteId) {
+  const [sponsors, setSponsors] = useState<PublicSponsor[]>(() => fallbackSponsors(siteId));
+
+  useEffect(() => {
+    let live = true;
+    setSponsors(fallbackSponsors(siteId));
+    void import("@/lib/civic")
+      .then(({ getPublicSponsors }) => getPublicSponsors({ data: { siteId } }))
+      .then((rows) => {
+        if (live) setSponsors(rows);
+      })
+      .catch((err) => {
+        console.warn("[civic] sponsor list fallback", err);
+      });
+    return () => {
+      live = false;
+    };
+  }, [siteId]);
+
+  return sponsors;
+}
+
+function copyNeighborPost() {
+  void navigator.clipboard.writeText(NEIGHBOR_POST).then(
+    () => toast("Neighbor post copied."),
+    () => toast("Copy failed. The text is on the Sponsors tab."),
   );
 }
 
-function SplitCard() {
+export function SplitCard() {
   const rows = [
     { pct: PUBLIC_SPLIT.park, label: PUBLIC_SPLIT.parkLabel },
     { pct: PUBLIC_SPLIT.operate, label: PUBLIC_SPLIT.operateLabel },
@@ -52,7 +93,7 @@ function SplitCard() {
     <Card>
       <CardHeader>
         <CardTitle>Where a sponsor dollar goes</CardTitle>
-        <CardDescription>Neighbors pay nothing. This is the whole split — not a footnote.</CardDescription>
+        <CardDescription>Neighbors pay nothing to check in or vote. This is the whole model.</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {rows.map((r) => (
@@ -70,22 +111,99 @@ function SplitCard() {
   );
 }
 
-function GiftCard() {
+function MoneyPathCard({ activeCustodianCount }: { activeCustodianCount: number }) {
+  return (
+    <Card className="border-primary">
+      <CardHeader>
+        <CardTitle>Money path, plainly</CardTitle>
+        <CardDescription>No private individual holds park or shelter improvement funds.</CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-3 text-sm text-muted">
+        <p>
+          <span className="font-medium text-fg">Today:</span> Civic Parks is a neighbor board and
+          open ballot. Stripe is not connected, there is no checkout, and package taps are intent
+          only.
+        </p>
+        <p>
+          <span className="font-medium text-fg">Before money moves:</span> a bank, credit union, or
+          designated shelter partner must opt in as a true sponsor. That sponsor acts as the
+          transparent custodian/escrow path for the specific park project.
+        </p>
+        <p>
+          <span className="font-medium text-fg">Active custodians:</span>{" "}
+          {activeCustodianCount === 0
+            ? "none yet; the page shows the model without pretending live payment wires exist."
+            : activeCustodianCount.toLocaleString()}
+        </p>
+        <Link to="/transparency" className="font-medium text-fg underline">
+          Read the transparency page
+        </Link>
+      </CardContent>
+    </Card>
+  );
+}
+
+function NeighborPostCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Gift this to Kaukauna</CardTitle>
+        <CardTitle>Share the neighbor board</CardTitle>
         <CardDescription>
-          Share {PRODUCT.canonical} — a Milo Maps address, not a throwaway link.
+          Copy explains this is not a city app, not a fundraiser, and not a personal handoff.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         <pre className="whitespace-pre-wrap rounded-md border border-border bg-bg p-3 text-sm text-muted">
-          {GIFT_POST}
+          {NEIGHBOR_POST}
         </pre>
-        <Button className="w-full" onClick={copyGift}>
-          Copy gift post
+        <Button className="w-full" onClick={copyNeighborPost}>
+          Copy neighbor-board post
         </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+function SponsorCard({ sponsor }: { sponsor: PublicSponsor }) {
+  const trueSponsor = isTrueSponsor(sponsor);
+  return (
+    <Card
+      className={cn(
+        "rounded-lg",
+        trueSponsor ? "border-primary bg-surface" : "border-border bg-surface-2/60 shadow-none opacity-80",
+      )}
+    >
+      <CardContent className="flex flex-col gap-3 p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="flex flex-wrap gap-2">
+              <Badge variant={trueSponsor ? "default" : "muted"}>
+                {trueSponsor ? "True sponsor" : "Prospect"}
+              </Badge>
+              <Badge variant="outline">{SPONSOR_CATEGORY_LABELS[sponsor.category]}</Badge>
+              {sponsor.isCustodian && trueSponsor ? <Badge variant="outline">Custodian</Badge> : null}
+            </div>
+            <p className="mt-2 flex items-center gap-2 font-medium">
+              <Building2 className="size-4 text-primary" />
+              {sponsor.name}
+            </p>
+            <p className="text-sm text-muted">{sponsor.note}</p>
+          </div>
+          <p className="shrink-0 tabular-nums text-sm">
+            {trueSponsor ? formatUsd(sponsor.pledged) : "not paid"}
+          </p>
+        </div>
+        {trueSponsor ? (
+          <Link
+            to="/sponsors/$sponsorId"
+            params={{ sponsorId: sponsor.id }}
+            className="text-sm font-medium text-fg underline"
+          >
+            Sponsor showcase
+          </Link>
+        ) : (
+          <p className="text-xs text-subtle">Grey prospect only. This is not a paid placement.</p>
+        )}
       </CardContent>
     </Card>
   );
@@ -104,9 +222,11 @@ export function ParkView() {
   const challenges = useMilo((s) => s.challenges);
   const site = siteById(siteId);
   const done = CHALLENGES.filter((c) => challenges[c.id]).length;
+  const onName = useOnParksName();
 
   return (
     <div className="flex flex-col gap-6">
+      {onName ? null : <LaunchNameCard />}
       <header className="flex flex-col gap-3">
         <h1 className="font-display text-3xl font-medium tracking-tight text-fg sm:text-4xl">{site.name}</h1>
         <p className="max-w-xl text-muted">{site.blurb}</p>
@@ -114,6 +234,23 @@ export function ParkView() {
           {site.address} · {site.hours}
         </p>
       </header>
+      <Card className="border-primary">
+        <CardHeader>
+          <CardTitle>Neighbor board + open ballot</CardTitle>
+          <CardDescription>
+            Friends of Kaukauna Dog Park style: regulars name issues, vote in public, and keep the
+            park free.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-2 text-sm text-muted">
+          <p>
+            This is not a city app and does not imply city approval. The park is community-used and
+            effectively ungoverned day to day; Civic Parks captures neighbor signal for lighting,
+            ground, access, seating, and winter routes.
+          </p>
+          <p>Neighbors still pay $0 to check in, earn {PRODUCT.token}, or vote.</p>
+        </CardContent>
+      </Card>
       <ParkMap siteId={siteId} />
       <div className="flex gap-2">
         <Button variant="secondary" className="flex-1" onClick={toggleNight}>
@@ -186,9 +323,14 @@ export function ParkView() {
         ))}
       </ul>
       <p className="text-xs text-subtle">
-        {PRODUCT.canonical} · not a city app · neighbors $0 · Stripe off · split 80 / 15 / 5.{" "}
+        {PRODUCT.canonical} · neighbor board · not a city app · no city approval required for the
+        ballot · neighbors $0.{" "}
         <Link to="/about" className="underline">
           About
+        </Link>
+        {" · "}
+        <Link to="/transparency" className="underline">
+          Transparency
         </Link>
         {" · "}
         <Link to="/privacy" className="underline">
@@ -211,12 +353,12 @@ export function VoteView() {
   const siteId = useMilo((s) => s.siteId);
   const votes = useMilo((s) => s.votes);
   const tokens = useMilo((s) => s.tokens);
-  const extraPledge = useMilo((s) => s.extraPledge[siteId]);
   const vote = useMilo((s) => s.vote);
   const addProposal = useMilo((s) => s.addProposal);
   const addComment = useMilo((s) => s.addComment);
   const comments = useMilo((s) => s.comments);
   const custom = useMilo((s) => s.customProposals);
+  const sponsors = usePublicSponsors(siteId);
   const [tag, setTag] = useState<(typeof TAGS)[number]>("All");
   const [openId, setOpenId] = useState<string | null>(null);
   const [note, setNote] = useState("");
@@ -228,16 +370,19 @@ export function VoteView() {
     return [...filtered].sort((a, b) => votesFor(b, votes[b.id] ?? 0) - votesFor(a, votes[a.id] ?? 0));
   }, [custom, siteId, tag, votes]);
   const siteCost = list.reduce((s, p) => s + p.cost, 0) || 1;
+  const activeSponsorDollars = activeSponsorTotal(sponsors);
 
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-2">
         <h1 className="font-display text-3xl font-medium tracking-tight">Ballot</h1>
         <p className="text-muted">
-          Spend {PRODUCT.token} earned on site. Highest-voted work is what sponsors fund next at{" "}
-          {siteById(siteId).name}.
+          Spend {PRODUCT.token} earned on site. Highest-voted work tells true sponsors what the
+          neighbor board wants next at {siteById(siteId).name}.
         </p>
-        <p className="text-sm tabular-nums text-subtle">Balance {tokens}</p>
+        <p className="text-sm tabular-nums text-subtle">
+          Balance {tokens} · true sponsor dollars recorded {formatUsd(activeSponsorDollars)}
+        </p>
       </header>
       <div className="flex flex-wrap gap-2">
         {TAGS.map((t) => (
@@ -258,7 +403,7 @@ export function VoteView() {
       <div className="flex flex-col gap-4">
         {list.map((p) => {
           const v = votesFor(p, votes[p.id] ?? 0);
-          const funded = fundedFor(p, extraPledge, siteCost);
+          const funded = fundedFor(p, activeSponsorDollars, siteCost);
           const open = openId === p.id;
           const thread = comments.filter((c) => c.proposalId === p.id);
           return (
@@ -280,7 +425,7 @@ export function VoteView() {
                     <span>
                       Votes {v.toLocaleString()} / {p.voteGoal}
                     </span>
-                    <span>Funded {Math.round((funded / p.cost) * 100)}%</span>
+                    <span>True sponsor funded {Math.round((funded / p.cost) * 100)}%</span>
                   </div>
                   <Progress value={(v / p.voteGoal) * 100} />
                 </div>
@@ -548,66 +693,52 @@ export function FundView() {
   const custom = useMilo((s) => s.customProposals);
   const siteProps = allProposals({ customProposals: custom }).filter((p) => p.siteId === siteId);
   const totalNeed = siteProps.reduce((s, p) => s + p.cost, 0);
-  const seed = SPONSORS.filter((s) => s.siteId === siteId).reduce((s, x) => s + x.pledged, 0);
-  const raised = seed + extraPledge;
-  const localSponsors = SPONSORS.filter((s) => s.siteId === siteId);
+  const localSponsors = usePublicSponsors(siteId);
+  const raised = activeSponsorTotal(localSponsors);
+  const activeCustodianCount = localSponsors.filter((s) => isTrueSponsor(s) && s.isCustodian).length;
 
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-2">
         <h1 className="font-display text-3xl font-medium tracking-tight">Sponsors</h1>
         <p className="text-muted">
-          The park stays free. Money follows the ballot. Stripe is not connected. Nobody’s card is charged.
+          Grey cards are prospects. Color cards are true sponsors only after an admin marks them
+          paid and active. Neighbors do not pay to vote or check in.
         </p>
       </header>
-      <Card className="border-primary">
-        <CardHeader>
-          <CardTitle>Money, plainly</CardTitle>
-          <CardDescription>So nobody in Kaukauna has to guess.</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-2 text-sm text-muted">
-          <p>
-            <span className="font-medium text-fg">Today:</span> this is a public ballot. Packages
-            record intent on this device. Sample pledges are labeled as samples. No Stripe. No
-            checkout. No fine print.
-          </p>
-          <p>
-            <span className="font-medium text-fg">When Stripe is live:</span> only local businesses
-            pay. The same 80 / 15 / 5 split hits every real dollar, on this page.
-          </p>
-        </CardContent>
-      </Card>
+      <MoneyPathCard activeCustodianCount={activeCustodianCount} />
       <SplitCard />
-      <GiftCard />
       <Card>
         <CardContent className="p-5">
-          <p className="text-xs text-muted">Intent toward {siteById(siteId).name} (not charged)</p>
+          <p className="text-xs text-muted">True sponsor dollars recorded for {siteById(siteId).name}</p>
           <p className="font-display text-3xl tabular-nums">{formatUsd(raised)}</p>
-          <p className="mt-1 text-sm text-subtle">of {formatUsd(totalNeed)} listed work</p>
+          <p className="mt-1 text-sm text-subtle">
+            of {formatUsd(totalNeed)} listed work · package intent on this device {formatUsd(extraPledge)}
+          </p>
           <Progress className="mt-4" value={totalNeed ? (raised / totalNeed) * 100 : 0} />
         </CardContent>
       </Card>
       <div className="flex flex-col gap-3">
+        <div>
+          <h2 className="font-display text-xl font-medium tracking-tight">Fox Valley sponsor board</h2>
+          <p className="mt-1 text-sm text-muted">
+            Prospects can be named, but they stay muted until a real sponsorship is opted in and
+            recorded by admin.
+          </p>
+        </div>
         {localSponsors.map((s) => (
-          <Card key={s.id} className="rounded-lg">
-            <CardContent className="flex items-start justify-between gap-3 p-4">
-              <div>
-                <p className="font-medium">{s.name}</p>
-                <p className="text-sm text-muted">{s.note}</p>
-                <p className="mt-1 text-xs text-subtle">{s.kind}</p>
-              </div>
-              <p className="tabular-nums text-sm">{formatUsd(s.pledged)}</p>
-            </CardContent>
-          </Card>
+          <SponsorCard key={s.id} sponsor={s} />
         ))}
       </div>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Wallet className="size-4" />
-            Record a package intent
+            Record package intent
           </CardTitle>
-          <CardDescription>Not a purchase. Stripe is off. This stays on this phone.</CardDescription>
+          <CardDescription>
+            Not a purchase. Stripe is off. Intent does not count as funded work.
+          </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-2">
           {PACKAGES.map((pkg) => (
@@ -629,6 +760,7 @@ export function FundView() {
           ))}
         </CardContent>
       </Card>
+      <NeighborPostCard />
     </div>
   );
 }

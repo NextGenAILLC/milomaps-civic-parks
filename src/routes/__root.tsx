@@ -13,7 +13,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Civic Parks by Milo Maps. Check in, earn PawSteps, vote park upgrades in the Fox Cities. No cards charged until Stripe is connected.",
+          "Civic Parks by Milo Maps. Neighbor-run park board for check-ins, PawSteps, and open ballots. Not a city app; no checkout.",
       },
       { name: "theme-color", content: "#2F4A3C" },
     ],
