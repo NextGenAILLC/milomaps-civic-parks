@@ -1,20 +1,21 @@
 #!/usr/bin/env node
 /**
- * Run a command with `.grok/app-env.json` merged into its environment.
+ * Run a command with committed app defaults + `.grok/app-env.json` merged into
+ * its environment.
  *
  * `dev`, `build` and `preview` all route through this wrapper, so the dev
  * server, the built bundle and the preview server can never disagree about
  * `VITE_AUTH_ENABLED` — a divergence that only shows up as a built-output
  * mismatch long after the fact. Anything that starts Vite directly bypasses it.
  *
- * Only `VITE_`-prefixed keys are honored: the file is a build flag carrier, not
- * a secret store, and only `VITE_` vars reach the browser anyway. A real
+ * Only `VITE_`-prefixed keys are honored: these files are build flag carriers,
+ * not secret stores, and only `VITE_` vars reach the browser anyway. A real
  * `process.env` entry always wins, so an explicit override still works.
  *
- * That precedence also means the file governs this workspace only. A deployed
- * build runs with the provider's project env, where the deployer sets
- * `VITE_AUTH_ENABLED` itself (today unconditionally `"true"`), so the deployed
- * flag is the platform's, not this file's.
+ * Precedence, low to high:
+ *   1. `.env.production` committed defaults (non-secret VITE_* only)
+ *   2. `.grok/app-env.json` generated workspace overrides
+ *   3. `process.env` explicit/platform overrides
  *
  * Vite picks the values up because `loadEnv` prefix-matches entries already in
  * `process.env`, which is why the merge has to happen before Vite starts.
@@ -26,6 +27,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const APP_ENV_REL_PATH = ".grok/app-env.json";
+export const PRODUCTION_ENV_REL_PATH = ".env.production";
 
 const VITE_PREFIX = "VITE_";
 
@@ -51,12 +53,48 @@ export function parseAppEnv(text) {
   return env;
 }
 
-/** The app env recorded under `root`, or `{}` when the file is absent. */
-export function readAppEnv(root) {
+/**
+ * Parse the tiny dotenv subset this wrapper needs: VITE-prefixed KEY=VALUE
+ * pairs. Vite handles the full syntax later; this keeps non-Vite subprocesses
+ * (auth checks, tests) aligned without turning env files into secret stores.
+ */
+export function parseViteDotEnv(text) {
+  const env = {};
+  for (const line of String(text ?? "").split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (!match || !match[1].startsWith(VITE_PREFIX)) continue;
+    let value = match[2].trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    env[match[1]] = value;
+  }
+  return env;
+}
+
+function readProductionEnv(root) {
   try {
-    return parseAppEnv(readFileSync(join(root, APP_ENV_REL_PATH), "utf8"));
+    return parseViteDotEnv(readFileSync(join(root, PRODUCTION_ENV_REL_PATH), "utf8"));
   } catch {
     return {};
+  }
+}
+
+/** The app env recorded under `root`, or `{}` when the file is absent. */
+export function readAppEnv(root) {
+  const productionEnv = readProductionEnv(root);
+  try {
+    return {
+      ...productionEnv,
+      ...parseAppEnv(readFileSync(join(root, APP_ENV_REL_PATH), "utf8")),
+    };
+  } catch {
+    return productionEnv;
   }
 }
 
