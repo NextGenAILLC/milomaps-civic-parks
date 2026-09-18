@@ -291,6 +291,14 @@ export const CONCEPT_LEDGER = [
     status: "Disclosed",
     body: "Solo module on a Milo Maps subdomain, built to merge with Amber Trails.",
   },
+  {
+    id: "c7",
+    title: "Launch attach: parks CNAME to Civic Parks, DNS only",
+    filed: "2026-09-18T09:26:00-04:00",
+    owner: "Milo Maps",
+    status: "Disclosed",
+    body: "Cloudflare parks CNAME to milomaps-parks.netlify.app, grey cloud. Netlify add parks.milomaps.com. Do not touch apex or www. Do not post Facebook until the name loads Civic Parks.",
+  },
 ];
 
 export const CHALLENGES = [

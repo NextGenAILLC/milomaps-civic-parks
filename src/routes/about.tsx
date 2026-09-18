@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LegalLayout } from "@/components/legal-layout";
+import { LaunchNameCard } from "@/components/launch-name";
 import { PRODUCT, PUBLIC_SPLIT } from "@/lib/product";
 
 export const Route = createFileRoute("/about")({ component: About });
@@ -18,6 +19,7 @@ function About() {
         </a>
         . Same brand. Same tokens. Built to merge.
       </p>
+      <LaunchNameCard />
       <p>
         Neighbors never pay. Stripe is not connected on this beta. Sponsor packages record intent
         only. When real sponsor money is collected, it splits {PUBLIC_SPLIT.park}% park /{" "}

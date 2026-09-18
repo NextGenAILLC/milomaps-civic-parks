@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ParkMap } from "@/components/park-map";
+import { LaunchNameCard, useOnParksName } from "@/components/launch-name";
 import {
   CHALLENGES,
   CONCEPT_LEDGER,
@@ -71,20 +72,30 @@ function SplitCard() {
 }
 
 function GiftCard() {
+  const onName = useOnParksName();
   return (
     <Card>
       <CardHeader>
         <CardTitle>Gift this to Kaukauna</CardTitle>
         <CardDescription>
-          Share {PRODUCT.canonical} — a Milo Maps address, not a throwaway link.
+          {onName
+            ? `Share ${PRODUCT.canonical} — a Milo Maps address, not a throwaway link.`
+            : "Copy the post now if you want. Do not paste it into Facebook until parks.milomaps.com loads Civic Parks."}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
+        {onName ? null : (
+          <p className="rounded-md border border-border bg-bg p-3 text-sm text-muted">
+            Right now parks.milomaps.com still shows Amber Trails. Finish the two launch steps on
+            this tab first. Neighbors should land on Kaukauna, PawSteps, and 80 / 15 / 5 — not the
+            parent trail map.
+          </p>
+        )}
         <pre className="whitespace-pre-wrap rounded-md border border-border bg-bg p-3 text-sm text-muted">
           {GIFT_POST}
         </pre>
         <Button className="w-full" onClick={copyGift}>
-          Copy gift post
+          {onName ? "Copy gift post" : "Copy gift post — do not share yet"}
         </Button>
       </CardContent>
     </Card>
@@ -560,6 +571,7 @@ export function FundView() {
           The park stays free. Money follows the ballot. Stripe is not connected. Nobody’s card is charged.
         </p>
       </header>
+      <LaunchNameCard />
       <Card className="border-primary">
         <CardHeader>
           <CardTitle>Money, plainly</CardTitle>
