@@ -7,16 +7,16 @@ export const PRODUCT = {
   token: "PawSteps",
   canonical: "https://milomaps.org",
   parksHost: "https://parks.milomaps.com",
-  liveNow: "https://milomaps-parks.netlify.app",
+  liveNow: "https://milomapsparks.netlify.app",
   parentUrl: "https://milomaps.com",
   parentWww: "https://www.milomaps.com",
   parentProduct: "Amber Trails",
   storyUrl: "https://milomaps.com/story",
   mapUrl: "https://milomaps.com/map",
   partnerUrl: "https://milomaps.com/pioneer",
-  netlifyDomains: "https://app.netlify.com/projects/milomaps-parks/domain-management",
+  netlifyDomains: "https://app.netlify.com/projects/milomapsparks/domain-management",
   netlifyVisibility:
-    "https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility",
+    "https://app.netlify.com/projects/milomapsparks/configuration/general#project-visibility",
   region: "Fox Cities, Wisconsin",
   build: "solo-public-beta",
   payments: "custodian-sponsor-only",
@@ -44,7 +44,7 @@ export const PUBLIC_SPLIT = {
 export const DOMAIN_LAUNCH = {
   canonicalHost: "milomaps.org",
   alternateHost: "parks.milomaps.com",
-  liveHost: "milomaps-parks.netlify.app",
+  liveHost: "milomapsparks.netlify.app",
   statusUntilAttached:
     "Civic Parks is public at milomaps.org. parks.milomaps.com can keep pointing here too; Amber Trails stays on milomaps.com.",
   statusAttached: "This host is Civic Parks. Amber Trails stays on milomaps.com.",
@@ -55,9 +55,9 @@ export const DOMAIN_LAUNCH = {
       href: "https://milomaps.org",
     },
     {
-      address: "milomaps-parks.netlify.app",
+      address: "milomapsparks.netlify.app",
       loads: "Netlify project host for the same app",
-      href: "https://milomaps-parks.netlify.app",
+      href: "https://milomapsparks.netlify.app",
     },
     {
       address: "parks.milomaps.com",
@@ -73,8 +73,8 @@ export const DOMAIN_LAUNCH = {
   stepPublic: {
     n: "1",
     title: "Keep Netlify visitor access public",
-    where: "Netlify -> milomaps-parks -> Project configuration -> General -> Visitor access -> Project visibility -> Public",
-    href: "https://app.netlify.com/projects/milomaps-parks/configuration/general#project-visibility",
+    where: "Netlify -> milomapsparks -> Project configuration -> General -> Visitor access -> Project visibility -> Public",
+    href: "https://app.netlify.com/projects/milomapsparks/configuration/general#project-visibility",
     why: "Neighbors need the ballot without a team login.",
     locked:
       "If Public is locked: Team settings -> General -> Visitor access -> Default project visibility. Turn off 'Private for all projects,' then set this project to Public.",
@@ -85,7 +85,7 @@ export const DOMAIN_LAUNCH = {
     where: "Cloudflare -> milomaps.com -> DNS -> parks can point to this Netlify app. Leave @ and www alone.",
     type: "CNAME",
     name: "parks",
-    target: "milomaps-parks.netlify.app",
+    target: "milomapsparks.netlify.app",
     proxy: "DNS only (grey cloud)",
     proxyHow:
       "Click the orange cloud so it turns grey. Orange in front of Netlify blocks their HTTPS certificate. Grey first. Orange later only after Civic Parks loads with a lock.",
@@ -93,9 +93,9 @@ export const DOMAIN_LAUNCH = {
   step2: {
     n: "3",
     title: "Netlify domain list",
-    where: "Netlify -> milomaps-parks -> Domain management should include milomaps.org and may include parks.milomaps.com.",
+    where: "Netlify -> milomapsparks -> Domain management should include milomaps.org and may include parks.milomaps.com.",
     domain: "parks.milomaps.com",
-    href: "https://app.netlify.com/projects/milomaps-parks/domain-management",
+    href: "https://app.netlify.com/projects/milomapsparks/domain-management",
     txtType: "TXT",
     txtName: "netlify-challenge.parks",
     txtHint: "Only if Netlify asks — paste the string they show as the content.",
