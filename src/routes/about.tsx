@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LegalLayout } from "@/components/legal-layout";
-import { LaunchNameCard } from "@/components/launch-name";
 import { PRODUCT, PUBLIC_SPLIT } from "@/lib/product";
 
 export const Route = createFileRoute("/about")({ component: About });
@@ -9,29 +8,29 @@ function About() {
   return (
     <LegalLayout title="Neighbor-run Civic Parks">
       <p>
-        {PRODUCT.brand} is the parent. {PRODUCT.parentProduct} lives at{" "}
-        <a className="text-fg underline" href={PRODUCT.parentUrl}>
-          milomaps.com
-        </a>
-        . Civic Parks is the neighbor-board and park-ballot module at{" "}
+        Civic Parks on{" "}
         <a className="text-fg underline" href={PRODUCT.canonical}>
           milomaps.org
-        </a>
-        . parks.milomaps.com may still point here as an alternate host.
-      </p>
-      <LaunchNameCard />
-      <p>
-        The public posture is simple: not a city app, no city approval required to collect
-        community signal, and no personal operator identity as the public face.
+        </a>{" "}
+        is a neighbor board and open ballot for park regulars — starting with Kaukauna Dog Park.
+        It is not a city app and does not need city approval to collect community signal.
       </p>
       <p>
-        Neighbors never pay to check in or vote. Stripe is not connected. Sponsor and community
-        money is never held by a private individual operator; real project funds require a bank,
-        credit union, or designated shelter partner as transparent custodian.
+        Neighbors never pay to check in or vote. Stripe is not connected. Banks, credit unions, and
+        other sponsors stay grey prospects until they opt in as a transparent custodian for a
+        specific park project. Sponsor and community money is never held by a private individual
+        operator.
       </p>
       <p>
-        If real sponsor money is recorded, the split is {PUBLIC_SPLIT.park}% park /{" "}
+        If real sponsor money is later recorded, the split is {PUBLIC_SPLIT.park}% park /{" "}
         {PUBLIC_SPLIT.operate}% operate / {PUBLIC_SPLIT.steward}% steward reserve.
+      </p>
+      <p>
+        Operator tools stay behind a password on{" "}
+        <a className="text-fg underline" href="/admin">
+          /admin
+        </a>
+        . No operator email, phone, or inbox is shown on the public board.
       </p>
     </LegalLayout>
   );

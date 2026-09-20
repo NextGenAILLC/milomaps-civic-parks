@@ -79,17 +79,26 @@ export const SITES: Site[] = [
       {
         id: "lighting",
         title: "Shoulder-hour lighting",
-        detail: "Trail and gates go dark. Owners bring flashlights. Evening turnout drops.",
+        detail:
+          "After 6:30 in fall the pond loop and both gates go dark. Regulars park with headlights on or skip the second loop. Evening turnout collapses while the park is still open until 11.",
       },
       {
         id: "ground",
-        title: "Uneven ground",
-        detail: "Ruts and frost heave punish knees, walkers, and wheels.",
+        title: "Uneven ground and frost heave",
+        detail:
+          "The parking-to-small-dog walk and near-pond stretch rut after thaw. Walkers, strollers, and knees take the hit; people with mobility limits stop at the lot.",
       },
       {
         id: "access",
-        title: "Disabled pet-owner access",
-        detail: "Parking-to-gate is not a continuous accessible route.",
+        title: "Continuous accessible route",
+        detail:
+          "There is no firm path from a van stall through the double gates to seating, water, and the pond loop. Access is a neighbor priority, not a nicety.",
+      },
+      {
+        id: "winter",
+        title: "Winter edge readability",
+        detail:
+          "When snow covers the grass edge, the pond loop disappears. Year-round hours only help if the path still reads after a storm.",
       },
     ],
   },
@@ -283,7 +292,7 @@ export const SPONSORS: Sponsor[] = [
     website: "https://www.capitalcu.com",
     showcaseTitle: "Credit union prospect",
     showcaseBody:
-      "Prospect cards stay grey until an admin marks the sponsor paid/active after opt-in.",
+      "Prospect cards stay grey until a verified record marks the sponsor paid/active after opt-in.",
   },
   {
     id: "bank-first-kaukauna",
@@ -297,7 +306,7 @@ export const SPONSORS: Sponsor[] = [
     note: "Local bank prospect for transparent sponsor custody; not paid or active.",
     website: "https://www.bankfirst.com",
     showcaseTitle: "Bank sponsor prospect",
-    showcaseBody: "Can become a color sponsor only after admin confirms a real opt-in.",
+    showcaseBody: "Can become a color sponsor only after a confirmed opt-in is recorded.",
   },
   {
     id: "associated-bank-fox-valley",
@@ -381,7 +390,7 @@ export const SPONSORS: Sponsor[] = [
     note: "Kaukauna credit union prospect for Kelso trail or access work.",
     website: "https://www.unisoncu.org",
     showcaseTitle: "Credit union prospect",
-    showcaseBody: "Prospect only; active sponsor status requires admin confirmation.",
+    showcaseBody: "Prospect only; active sponsor status requires a confirmed opt-in on record.",
   },
   {
     id: "kaukauna-feed-and-pet",
