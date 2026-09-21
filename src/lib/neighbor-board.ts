@@ -117,3 +117,35 @@ export const PROPOSAL_META: Record<string, ProposalMeta> = {
     urgency: "this-season",
   },
 };
+
+/** Draft hierarchy for Rob to approve — neighbor board, not city appointments. */
+export const BOARD_HIERARCHY = [
+  {
+    seat: "Board chair",
+    does: "Sets ballot order, opens short comment windows, keeps one decision in focus.",
+  },
+  {
+    seat: "Access advocate (vice)",
+    does: "Watches gate-to-path access, mobility, and whether work reaches people who need it.",
+  },
+  {
+    seat: "Notes / ballot clerk",
+    does: "Publishes what passed, what waited, and the public ranking after each window.",
+  },
+  {
+    seat: "At-large neighbors",
+    does: "Equal votes from park regulars (trail, winter, evening use).",
+  },
+  {
+    seat: "Sponsor liaison (non-custodial)",
+    does: "Names grey prospects only. Never holds dollars; true sponsors opt in as custodians.",
+  },
+  {
+    seat: "Observer (optional)",
+    does: "City or sponsor liaison may watch; no vote until seated as a neighbor.",
+  },
+] as const;
+
+/** Quorum note — adjustable after Rob approves. */
+export const BOARD_QUORUM_NOTE =
+  "Quorum draft: board chair + two seated neighbors. Simple majority of seated votes. Sponsors stay grey until a real opt-in.";
