@@ -2,7 +2,7 @@ export const PRODUCT = {
   brand: "Milo Maps",
   module: "civic-parks",
   moduleName: "Civic Parks",
-  version: "1.3.0",
+  version: "1.3.1",
   schema: "milomaps.civic.v1",
   token: "PawSteps",
   canonical: "https://milomaps.org",
@@ -114,9 +114,9 @@ export const DOMAIN_LAUNCH = {
 
 export const NEIGHBOR_POST = `Kaukauna Dog Park neighbors —
 
-Civic Parks is a neighbor-run board for the park regulars: check in, earn PawSteps, and vote on the fixes that matter first.
+Civic Parks is a neighbor-run board for park regulars: check in, earn PawSteps, and vote on the fixes that matter first.
 
-It is not a city app and it does not need city approval to collect community signal. It is an open ballot in the style of Friends of Kaukauna Dog Park: regulars name the issues, vote in public, and keep the park free.
+It is not a city app and it does not need city approval to collect community signal. Friends of Kaukauna Dog Park style: regulars name the issues, vote in public, and keep the park free.
 
 Nobody pays to vote or check in. There is no checkout here and Stripe is not connected.
 
@@ -128,6 +128,8 @@ If a true sponsor later funds a project, the money path has to be visible:
 
 Sponsor and community money is never held by a private individual operator. It routes only through a bank, credit union, or designated shelter partner that opts in as a transparent custodian for the specific park project.
 
-Use it, vote, and share the board. You are not selling anything. You are handing neighbors a ballot.
+Share this with park friends, then open the board:
+https://milomaps.org/friends
 
+Live ballot:
 https://milomaps.org`;
