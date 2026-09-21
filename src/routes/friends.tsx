@@ -57,12 +57,18 @@ function FriendsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-3">
-          <Button asChild className="h-12 w-full text-base">
-            <a href={PRODUCT.canonical}>Go to milomaps.org</a>
-          </Button>
-          <Button asChild variant="secondary" className="h-11 w-full">
-            <Link to="/">Open board on this device</Link>
-          </Button>
+          <a
+            href={PRODUCT.canonical}
+            className="inline-flex h-12 w-full items-center justify-center rounded-md bg-primary px-4 text-base font-medium text-primary-fg"
+          >
+            Go to milomaps.org
+          </a>
+          <Link
+            to="/"
+            className="inline-flex h-11 w-full items-center justify-center rounded-md border border-border bg-surface px-4 text-sm font-medium text-fg"
+          >
+            Open board on this device
+          </Link>
         </CardContent>
       </Card>
 

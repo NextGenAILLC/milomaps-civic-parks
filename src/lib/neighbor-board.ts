@@ -88,6 +88,7 @@ export type ProposalMeta = {
   urgency: "now" | "this-season" | "next-year";
 };
 
+/** Keys must match proposal ids in src/lib/data.ts */
 export const PROPOSAL_META: Record<string, ProposalMeta> = {
   "solar-lights": {
     who: "Weeknight walkers, winter regulars, anyone finishing work after dark",
