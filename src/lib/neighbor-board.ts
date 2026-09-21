@@ -56,7 +56,7 @@ export const NEIGHBOR_BOARD: BoardSeat[] = [
     role: "Sponsor liaison",
     name: "R. Haas",
     focus: "Banks, credit unions, and shelter partners as grey prospects",
-    note: "Names prospects only. Dollars stay grey until a custodian opts in for a specific project. Never shows fake paid $".",
+    note: "Names prospects only. Dollars stay grey until a custodian opts in for a specific project. Never shows fake paid $.",
     tier: "prospect-liaison",
   },
 ];
