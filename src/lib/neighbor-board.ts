@@ -1,9 +1,12 @@
+export type BoardTier = "officer" | "at-large" | "prospect-liaison";
+
 export type BoardSeat = {
   id: string;
   role: string;
   name: string;
   focus: string;
   note: string;
+  tier: BoardTier;
 };
 
 /** Neighbor roles for Kaukauna Civic Parks — not city appointments. */
@@ -14,43 +17,53 @@ export const NEIGHBOR_BOARD: BoardSeat[] = [
     name: "M. Keller",
     focus: "Agenda, ballot order, keeping the board neighbor-led",
     note: "Runs the open ranking so lighting vs access vs winter work is sequenced in public.",
+    tier: "officer",
+  },
+  {
+    id: "vice",
+    role: "Vice / Access advocate",
+    name: "S. Rivera",
+    focus: "Parking-to-gate route, van stalls, seating reach",
+    note: "Stands in when the chair is out. Keeps mobility users in every capital conversation — not as an afterthought.",
+    tier: "officer",
+  },
+  {
+    id: "notes",
+    role: "Notes owner",
+    name: "T. Olsen",
+    focus: "PawSteps tallies, discussion notes, public ranking",
+    note: "Publishes what neighbors voted and what still needs a true sponsor custodian. No public admin inbox.",
+    tier: "officer",
   },
   {
     id: "trail",
-    role: "Trail steward",
+    role: "At-large · Trail",
     name: "J. Novak",
     focus: "Pond loop, bridges, winter edge readability",
     note: "Walks the loop after storms and flags where the path disappears under snow or mud.",
-  },
-  {
-    id: "access",
-    role: "Access advocate",
-    name: "S. Rivera",
-    focus: "Parking-to-gate route, van stalls, seating reach",
-    note: "Keeps mobility users in every capital conversation — not as an afterthought.",
+    tier: "at-large",
   },
   {
     id: "winter",
-    role: "Winter walks lead",
+    role: "At-large · Winter walks",
     name: "A. Berg",
     focus: "Shoulder-hour and January use",
     note: "Tracks when evening turnout collapses and which fixes bring people back.",
-  },
-  {
-    id: "ballot",
-    role: "Ballot clerk",
-    name: "T. Olsen",
-    focus: "PawSteps tallies, discussion notes, public ranking",
-    note: "Publishes what neighbors voted and what still needs a true sponsor custodian.",
+    tier: "at-large",
   },
   {
     id: "sponsor",
     role: "Sponsor liaison",
     name: "R. Haas",
     focus: "Banks, credit unions, and shelter partners as grey prospects",
-    note: "Names prospects only. Dollars stay grey until a custodian opts in for a specific project.",
+    note: "Names prospects only. Dollars stay grey until a custodian opts in for a specific project. Never shows fake paid $".",
+    tier: "prospect-liaison",
   },
 ];
+
+/** Neighbor board — not city hall. */
+export const QUORUM_NOTE =
+  "Informal quorum: board chair or vice plus any two other named seats. Ranking votes are public neighbor signal for decision makers — they do not bind the City of Kaukauna or any parks department.";
 
 export const DECISION_STEPS = [
   {
@@ -59,12 +72,13 @@ export const DECISION_STEPS = [
   },
   {
     title: "Board reads the ranking",
-    detail: "Neighbor roles sequence what to pitch first. This is signal, not a city ordinance.",
+    detail:
+      "Chair, vice, and notes owner sequence what to pitch first. At-large neighbors keep trail and winter truth on the table. This is signal, not a city ordinance.",
   },
   {
     title: "True sponsors fund with a custodian",
     detail:
-      "Banks and credit unions stay grey prospects until they opt in. Money never sits with a private operator.",
+      "Banks and credit unions stay grey prospects until they opt in. Money never sits with a private operator. No public admin email.",
   },
 ] as const;
 
