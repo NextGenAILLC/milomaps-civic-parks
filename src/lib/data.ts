@@ -100,6 +100,12 @@ export const SITES: Site[] = [
         detail:
           "When snow covers the grass edge, the pond loop disappears. Year-round hours only help if the path still reads after a storm.",
       },
+      {
+        id: "fence",
+        title: "Fence repair needed",
+        detail:
+          "— neighbor report Sept 21, 2026: a stretch of fence is patched with temporary green mesh and traffic cones (photos on file). Listed as a community condition note, not a city statement.",
+      },
     ],
   },
   {

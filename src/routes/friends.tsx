@@ -74,11 +74,11 @@ function Friends() {
       </ol>
       <p className="mt-2 text-sm opacity-80">{BOARD_QUORUM_NOTE}</p>
 
-      <h2 className="mb-2 mt-8 text-xl font-semibold">Seated neighbors (draft)</h2>
+      <h2 className="mb-2 mt-8 text-xl font-semibold">Open volunteer roles</h2>
       <ul className="space-y-2">
         {NEIGHBOR_BOARD.map((seat) => (
           <li key={seat.id}>
-            <strong>{seat.role}</strong> · {seat.name} — {seat.focus}
+            <strong>{seat.role}</strong> — {seat.focus}
           </li>
         ))}
       </ul>
