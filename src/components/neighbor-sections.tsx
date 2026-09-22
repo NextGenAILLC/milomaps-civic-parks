@@ -8,8 +8,8 @@ export function NeighborBoardSection() {
       <CardHeader>
         <CardTitle>Neighbor board</CardTitle>
         <CardDescription>
-          Roles for Kaukauna Civic Parks regulars — not city appointments. These are the people
-          sequencing choices for decision makers.
+          Open volunteer roles for Kaukauna Civic Parks regulars — not city appointments. No one is
+          seated until a real neighbor claims a role.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
@@ -17,7 +17,6 @@ export function NeighborBoardSection() {
           <div key={seat.id} className="border-t border-border pt-3 first:border-0 first:pt-0">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <p className="text-sm font-medium">{seat.role}</p>
-              <p className="text-xs text-subtle">{seat.name}</p>
             </div>
             <p className="mt-1 text-sm text-muted">{seat.focus}</p>
             <p className="mt-1 text-xs text-subtle">{seat.note}</p>

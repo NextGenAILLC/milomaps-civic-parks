@@ -1,7 +1,6 @@
 export type BoardSeat = {
   id: string;
   role: string;
-  name: string;
   focus: string;
   note: string;
 };
@@ -10,43 +9,37 @@ export type BoardSeat = {
 export const NEIGHBOR_BOARD: BoardSeat[] = [
   {
     id: "chair",
-    role: "Board chair",
-    name: "M. Keller",
+    role: "Board chair (open)",
     focus: "Agenda, ballot order, keeping the board neighbor-led",
     note: "Runs the open ranking so lighting vs access vs winter work is sequenced in public.",
   },
   {
     id: "trail",
-    role: "Trail steward",
-    name: "J. Novak",
+    role: "Trail steward (open)",
     focus: "Pond loop, bridges, winter edge readability",
     note: "Walks the loop after storms and flags where the path disappears under snow or mud.",
   },
   {
     id: "access",
-    role: "Access advocate",
-    name: "S. Rivera",
+    role: "Access advocate (open)",
     focus: "Parking-to-gate route, van stalls, seating reach",
     note: "Keeps mobility users in every capital conversation — not as an afterthought.",
   },
   {
     id: "winter",
-    role: "Winter walks lead",
-    name: "A. Berg",
+    role: "Winter walks lead (open)",
     focus: "Shoulder-hour and January use",
     note: "Tracks when evening turnout collapses and which fixes bring people back.",
   },
   {
     id: "ballot",
-    role: "Ballot clerk",
-    name: "T. Olsen",
+    role: "Ballot clerk (open)",
     focus: "PawSteps tallies, discussion notes, public ranking",
     note: "Publishes what neighbors voted and what still needs a true sponsor custodian.",
   },
   {
     id: "sponsor",
-    role: "Sponsor liaison",
-    name: "R. Haas",
+    role: "Sponsor liaison (open)",
     focus: "Banks, credit unions, and shelter partners as grey prospects",
     note: "Names prospects only. Dollars stay grey until a custodian opts in for a specific project.",
   },
