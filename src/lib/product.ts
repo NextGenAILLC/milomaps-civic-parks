@@ -10,7 +10,6 @@ export const PRODUCT = {
   liveNow: "https://milomapsparks.netlify.app",
   parentUrl: "https://milomaps.com",
   parentWww: "https://www.milomaps.com",
-  parentProduct: "Amber Trails",
   storyUrl: "https://milomaps.com/story",
   mapUrl: "https://milomaps.com/map",
   partnerUrl: "https://milomaps.com/pioneer",
@@ -25,7 +24,6 @@ export const PRODUCT = {
 export const FAMILY = [
   { label: "Civic Parks", href: "https://milomaps.org", here: true },
   { label: "Parks host", href: "https://parks.milomaps.com", here: false },
-  { label: "Amber Trails", href: "https://milomaps.com", here: false },
   { label: "Map", href: "https://milomaps.com/map", here: false },
   { label: "Story", href: "https://milomaps.com/story", here: false },
 ] as const;
@@ -46,8 +44,8 @@ export const DOMAIN_LAUNCH = {
   alternateHost: "parks.milomaps.com",
   liveHost: "milomapsparks.netlify.app",
   statusUntilAttached:
-    "Civic Parks is public at milomaps.org. parks.milomaps.com can keep pointing here too; Amber Trails stays on milomaps.com.",
-  statusAttached: "This host is Civic Parks. Amber Trails stays on milomaps.com.",
+    "Civic Parks is public at milomaps.org.",
+  statusAttached: "This host is Civic Parks.",
   liveRows: [
     {
       address: "milomaps.org",
@@ -66,7 +64,7 @@ export const DOMAIN_LAUNCH = {
     },
     {
       address: "milomaps.com / www",
-      loads: "Amber Trails — untouched. Do not change.",
+      loads: "Untouched. Do not change.",
       href: "https://www.milomaps.com",
     },
   ],
@@ -101,8 +99,8 @@ export const DOMAIN_LAUNCH = {
     txtHint: "Only if Netlify asks — paste the string they show as the content.",
   },
   leaveAlone: [
-    { name: "@ / milomaps.com", reason: "Amber Trails apex — do not change" },
-    { name: "www", reason: "Amber Trails on Vercel — do not change" },
+    { name: "@ / milomaps.com", reason: "Apex — do not change" },
+    { name: "www", reason: "On Vercel — do not change" },
     { name: "Nameservers", reason: "Stay on Cloudflare. Do not move the zone to Netlify." },
   ],
   doNot: [
