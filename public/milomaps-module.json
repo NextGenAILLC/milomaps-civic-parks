@@ -1,18 +1,1 @@
-{
-  "schema": "milomaps.civic.v1",
-  "brand": "Milo Maps",
-  "module": "civic-parks",
-  "version": "1.2.1",
-  "canonical": "https://parks.milomaps.com",
-  "liveNow": "https://milomaps-parks.netlify.app",
-  "parent": "https://milomaps.com",
-  "parentProduct": "Amber Trails",
-  "token": "PawSteps",
-  "payments": "intent-only",
-  "family": {
-    "civic": "https://parks.milomaps.com",
-    "trails": "https://milomaps.com",
-    "map": "https://milomaps.com/map",
-    "story": "https://milomaps.com/story"
-  }
-}
+{"brand":"Milo Maps","canonical":"https://milomaps.org","family":{"civic":"https://milomaps.org","map":"https://milomaps.com/map","story":"https://milomaps.com/story","trails":"https://milomaps.com"},"liveNow":"https://milomapsparks.netlify.app","module":"civic-parks","parent":"https://milomaps.com","payments":"intent-only","schema":"milomaps.civic.v1","token":"PawSteps","version":"1.2.1"}
