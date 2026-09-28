@@ -415,7 +415,17 @@ export const PACKAGES = [
 
 export const TAGS = ["All", "Safety", "Access", "Rest", "Winter", "Entry"] as const;
 
-export const CONCEPT_LEDGER = [
+export type LedgerEntry = {
+  id: string;
+  title: string;
+  filed: string;
+  owner: string;
+  status: string;
+  body: string;
+  photos?: string[];
+};
+
+export const CONCEPT_LEDGER: LedgerEntry[] = [
   {
     id: "c1",
     title: "Community token ballot for park capital",
@@ -438,15 +448,24 @@ export const CONCEPT_LEDGER = [
     filed: "2026-09-07T11:20:00-05:00",
     owner: "Milo Maps",
     status: "Disclosed",
-    body: "Neighbor-board module on a Milo Maps civic host, built to merge with Amber Trails.",
+    body: "Neighbor-board module on the Milo Maps civic host.",
   },
   {
     id: "c7",
-    title: "Host attach: Civic Parks plus alternate parks host",
+    title: "Host attach: Civic Parks on milomaps.org",
     filed: "2026-09-18T09:26:00-04:00",
     owner: "Milo Maps",
     status: "Disclosed",
-    body: "milomaps.org is canonical. parks.milomaps.com may remain as an alternate host. Amber Trails stays on milomaps.com and www.",
+    body: "milomaps.org is the canonical Civic Parks host.",
+  },
+  {
+    id: "c8",
+    title: "Boardwalk deck has no grip at night",
+    filed: "2026-09-27T23:00:00-05:00",
+    owner: "Milo Maps",
+    status: "Disclosed",
+    body: "Wooden boardwalk deck is slick with mildew after dark — almost slipped despite anti-slip boots. No lighting to see the hazard. Needs grip strips or resurfacing; treacherous for wheelchairs, canes, and older dogs too.",
+    photos: ["/reports/2026-09-27-deck-1.jpg", "/reports/2026-09-27-deck-2.jpg"],
   },
 ];
 
