@@ -34,7 +34,7 @@ export function LedgerView() {
       <header className="flex flex-col gap-2">
         <h1 className="font-display text-3xl font-medium tracking-tight">Concept ledger</h1>
         <p className="text-muted">
-          Timestamped under {PRODUCT.brand}. Export uses {PRODUCT.schema} for merge into Amber Trails.
+          Timestamped under {PRODUCT.brand}. Export uses {PRODUCT.schema} for the public record.
         </p>
       </header>
       <Card>
@@ -109,6 +109,19 @@ export function LedgerView() {
               </div>
               <p className="font-medium">{c.title}</p>
               <p className="text-sm text-muted">{c.body}</p>
+              {c.photos && c.photos.length > 0 ? (
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  {c.photos.map((p) => (
+                    <img
+                      key={p}
+                      src={p}
+                      alt=""
+                      loading="lazy"
+                      className="rounded-md border border-border object-cover"
+                    />
+                  ))}
+                </div>
+              ) : null}
             </CardContent>
           </Card>
         ))}
