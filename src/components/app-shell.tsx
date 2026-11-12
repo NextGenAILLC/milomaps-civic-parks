@@ -4,7 +4,7 @@ import { ClipboardList, Footprints, Info, Landmark, MapPinned, Vote } from "luci
 import { ParkView, VoteView, CheckinView, FundView, LedgerView } from "@/components/views";
 import { Button } from "@/components/ui/button";
 import { SITES, siteById } from "@/lib/data";
-import { FAMILY, PRODUCT } from "@/lib/product";
+import { PRODUCT } from "@/lib/product";
 import { useMilo, type TabId } from "@/lib/store";
 import { useOnParksName } from "@/lib/use-on-parks-name";
 import { cn } from "@/lib/utils";
@@ -74,7 +74,7 @@ export function AppShell() {
           <div className="flex items-center gap-2">
             <Link
               to="/about"
-              aria-label="About and family"
+              aria-label="About Civic Parks"
               className="flex size-11 items-center justify-center rounded-md border border-border bg-surface text-fg"
             >
               <Info className="size-4" />
@@ -85,19 +85,6 @@ export function AppShell() {
             </div>
           </div>
         </div>
-        <nav className="mt-3 flex gap-3 overflow-x-auto text-xs" aria-label="Milo Maps family">
-          {FAMILY.map((f) =>
-            f.here ? (
-              <span key={f.href} className="shrink-0 font-medium text-primary">
-                {f.label}
-              </span>
-            ) : (
-              <a key={f.href} href={f.href} className="shrink-0 text-muted underline-offset-2 hover:underline">
-                {f.label}
-              </a>
-            ),
-          )}
-        </nav>
       </header>
       <div className="flex gap-2 overflow-x-auto border-b border-border px-4 py-2">
         {SITES.map((s) => (

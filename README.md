@@ -8,7 +8,7 @@ Alternate host that may still exist: **https://parks.milomaps.com**
 
 Netlify project host: **https://milomaps-parks.netlify.app**
 
-This does **not** replace [milomaps.com](https://milomaps.com) (Amber Trails). Civic Parks is a sibling module.
+This does **not** replace [milomaps.com](https://milomaps.com). Civic Parks is a sibling module.
 
 ## What neighbors get
 
@@ -73,4 +73,4 @@ No personal operator phone, email, or name is published by the public app.
 
 `milomaps.org` is canonical. `parks.milomaps.com` may still exist and should continue to work as an alternate Civic Parks host. Do not break either host.
 
-`milomaps.com` and `www.milomaps.com` remain Amber Trails.
+`milomaps.com` and `www.milomaps.com` are untouched — do not change.
